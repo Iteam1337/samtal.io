@@ -1,11 +1,12 @@
 import express from 'express'
-import { ApolloServer, gql, PubSub } from 'apollo-server-express'
+import { ApolloServer, PubSub } from 'apollo-server-express'
 import { resolvers as queueResolvers } from './resolvers/chat'
 import { typeDefs } from './types'
 import merge from 'lodash.merge'
 import http from 'http'
 import { Chat } from './__generated__/graphql'
 import { db } from './adapters/postgres'
+import cors from 'cors'
 
 export const pubsub = new PubSub()
 
@@ -26,6 +27,8 @@ const server = new ApolloServer({
 })
 
 const app = express()
+
+app.use(cors())
 
 server.applyMiddleware({ app })
 
