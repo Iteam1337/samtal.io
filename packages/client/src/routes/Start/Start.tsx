@@ -1,7 +1,8 @@
-import React from 'react';
-import './Start.css';
-import gql from 'graphql-tag';
-import { useMutation } from '@apollo/client';
+import React from "react";
+import "./Start.css";
+import gql from "graphql-tag";
+import { useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 
 const CREATE_ROOM = gql`
   mutation CreateRoom($name: String!) {
@@ -13,17 +14,20 @@ const CREATE_ROOM = gql`
 `;
 
 function Start() {
+  let navigate = useNavigate();
   let input: any;
-  const [createRoom, { data }] = useMutation(CREATE_ROOM);
-  console.log(data)
+  const [createRoom] = useMutation(CREATE_ROOM, {
+    onCompleted: ({ createRoom }) => navigate(`/room/${createRoom.id}`)
+  });
+
   return (
     <div className="App">
       <form
         onSubmit={e => {
-          console.log(input.value)
+          console.log(input.value);
           e.preventDefault();
           createRoom({ variables: { name: input.value } });
-          input.value = '';
+          input.value = "";
         }}
       >
         <input
