@@ -8,7 +8,9 @@
   },
   "scripts": {
     "dev": "ts-node-dev --no-notify --ignore-watch node_modules lib/server.ts",
-    "generate": "graphql-codegen --config codegen.yml"
+    "generate": "graphql-codegen --config codegen.yml",
+    "migrate:up": "knex migrate:latest --env dev",
+    "migrate:down": "knex migrate:rollback --all --env dev"
   },
   "keywords": [
     "graphql",
@@ -18,8 +20,11 @@
   "license": "MIT",
   "dependencies": {
     "apollo-server-express": "2.9.6",
+    "cors": "^2.8.5",
     "express": "4.17.1",
-    "lodash.merge": "4.6.2"
+    "knex": "0.20.11",
+    "lodash.merge": "4.6.2",
+    "pg": "7.18.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.8.1",
