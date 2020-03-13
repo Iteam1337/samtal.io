@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useSubscription } from "@apollo/client";
+import ChatLog from "../../components/ChatLog";
 
 const SEND_MESSAGE = gql`
   mutation SendMessage($roomId: String!, $from: String!, $message: String!) {
@@ -11,8 +12,8 @@ const SEND_MESSAGE = gql`
   }
 `;
 
-const Room = () => {
-  const { id } = useParams();
+const Room: React.FC = () => {
+  const { roomId } = useParams();
   const [message, setMessage] = React.useState("");
   const [sendMessage] = useMutation(SEND_MESSAGE, {
     onCompleted: res => console.log(res)
@@ -20,11 +21,12 @@ const Room = () => {
 
   const handleSendMessage = (e: any) => {
     e.preventDefault();
-    sendMessage({ variables: { roomId: id, from: "Bella", message: message } });
+    sendMessage({ variables: { roomId, from: "Bella", message } });
   };
 
   return (
     <div>
+      <ChatLog roomId={roomId} />
       <form onSubmit={e => handleSendMessage(e)}>
         <input
           type="text"
