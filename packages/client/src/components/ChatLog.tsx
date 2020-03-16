@@ -28,13 +28,28 @@ const Wrapper = styled.div`
 
 const Message = styled(motion.li)`
   list-style: none;
-  background: white;
-  font-size: 14px;
   margin: 10px;
   position: relative;
-  border-radius: 10px;
-  padding: 2px 10px;
-  width: fit-content;
+  align-self: flex-end;
+
+  > div:last-of-type {
+    border-radius: 10px;
+    width: fit-content;
+    padding: 2px 10px;
+    background: white;
+    font-size: 14px;
+  }
+
+  > div:first-of-type {
+    margin-right: 5px;
+    p {
+      margin: 0;
+      font-weight: 500;
+      font-size: 12px;
+      color: #808080;
+      text-align: right;
+    }
+  }
 `
 
 interface ChatLogProps {
@@ -73,7 +88,12 @@ const ChatLog: React.FC<ChatLogProps> = ({ roomId }) => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
             >
-              <p>{entry.message}</p>
+              <motion.div>
+                <p>{entry.from}</p>
+              </motion.div>
+              <motion.div>
+                <p>{entry.message}</p>
+              </motion.div>
             </Message>
           ))}
         </AnimatePresence>
