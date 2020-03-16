@@ -12,12 +12,17 @@ const Wrapper = styled.div`
 `
 
 const Room: React.FC = () => {
+  const [message, setMessage] = React.useState("")
   const { roomId } = useParams()
 
   return (
     <Wrapper>
-      <ChatLog roomId={roomId} />
-      <CreateMessage roomId={roomId} />
+      <ChatLog message={message} roomId={roomId} />
+      <CreateMessage
+        message={message}
+        setMessage={setMessage}
+        roomId={roomId}
+      />
     </Wrapper>
   )
 }

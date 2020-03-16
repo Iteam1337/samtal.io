@@ -35,14 +35,21 @@ const Wrapper = styled.div`
   bottom: 0;
   left: 0;
   width: 100vw;
+  margin-bottom: 10px;
 `
 
 interface CreateMessageProps {
   roomId?: String
+  message: string
+  setMessage: (value: any) => void
 }
 
-const CreateMessage: React.FC<CreateMessageProps> = ({ roomId }) => {
-  const [message, setMessage] = React.useState("")
+const CreateMessage: React.FC<CreateMessageProps> = ({
+  roomId,
+  message,
+  setMessage,
+}) => {
+  // const [message, setMessage] = React.useState("")
   const [sendMessage] = useMutation(SEND_MESSAGE, {
     onCompleted: res => console.log(res),
   })
