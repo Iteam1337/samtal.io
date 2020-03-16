@@ -6,8 +6,6 @@ import CreateMessage from "../../components/CreateMessage"
 import styled from "styled-components"
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-flow: column;
   width: 100vw;
   height: 100vh;
   background: linear-gradient(180deg, #ecf5ff 23.79%, #ffedec 100%), #ffedec;

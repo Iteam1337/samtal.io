@@ -14,20 +14,26 @@ const MESSAGES_SUBSCRIPTION = gql`
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   height: 85vh;
   overflow: auto;
-  align-items: flex-end;
   max-height: 100vh;
+  align-items: flex-end;
+
+  > ul {
+    display: flex;
+    flex-direction: column;
+  }
 `
 
-const Message = styled(motion.div)`
+const Message = styled(motion.li)`
+  list-style: none;
   background: white;
   font-size: 14px;
   margin: 10px;
   position: relative;
   border-radius: 10px;
-  padding: 0 10px;
+  padding: 2px 10px;
   width: fit-content;
 `
 
@@ -57,19 +63,21 @@ const ChatLog: React.FC<ChatLogProps> = ({ roomId }) => {
 
   return (
     <Wrapper>
-      <AnimatePresence initial={false}>
-        {chatLog.map((entry, index) => (
-          <Message
-            key={index}
-            positionTransition
-            initial={{ opacity: 0, y: 50, scale: 0.3 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-          >
-            <p>{entry.message}</p>
-          </Message>
-        ))}
-      </AnimatePresence>
+      <ul>
+        <AnimatePresence initial={false}>
+          {chatLog.map((entry, index) => (
+            <Message
+              key={index}
+              positionTransition
+              initial={{ opacity: 0, y: 50, scale: 0.3 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+            >
+              <p>{entry.message}</p>
+            </Message>
+          ))}
+        </AnimatePresence>
+      </ul>
     </Wrapper>
   )
 }
