@@ -26,19 +26,11 @@ const Wrapper = styled.div`
   }
 `
 
-const Message = styled(motion.li)`
+const MessageBox = styled(motion.li)`
   list-style: none;
   margin: 10px;
   position: relative;
   align-self: flex-end;
-
-  > div:last-of-type {
-    border-radius: 10px;
-    width: fit-content;
-    padding: 2px 10px;
-    background: white;
-    font-size: 14px;
-  }
 
   > div:first-of-type {
     margin-right: 5px;
@@ -52,8 +44,30 @@ const Message = styled(motion.li)`
   }
 `
 
+const Message = styled.div`
+  border-radius: 10px;
+  width: fit-content;
+  padding: 2px 10px;
+  background: white;
+  font-size: 14px;
+  align-self: flex-end;
+`
+const MessageBlur = styled.div`
+  border-radius: 10px;
+  width: fit-content;
+  padding: 2px 10px;
+  background: white;
+  font-size: 14px;
+  align-self: flex-end;
+  p {
+    color: transparent;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  }
+`
+
 interface ChatLogProps {
   roomId?: string
+  message: string
 }
 
 type ChatMessage = {
@@ -61,7 +75,7 @@ type ChatMessage = {
   message: String
 }
 
-const ChatLog: React.FC<ChatLogProps> = ({ roomId }) => {
+const ChatLog: React.FC<ChatLogProps> = ({ roomId, message }) => {
   const { data, error } = useSubscription(MESSAGES_SUBSCRIPTION, {
     variables: { roomId },
   })
@@ -81,22 +95,27 @@ const ChatLog: React.FC<ChatLogProps> = ({ roomId }) => {
       <ul>
         <AnimatePresence initial={false}>
           {chatLog.map((entry, index) => (
-            <Message
+            <MessageBox
               key={index}
               positionTransition
               initial={{ opacity: 0, y: 50, scale: 0.3 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
             >
-              <motion.div>
+              <div>
                 <p>{entry.from}</p>
-              </motion.div>
-              <motion.div>
+              </div>
+              <Message>
                 <p>{entry.message}</p>
-              </motion.div>
-            </Message>
+              </Message>
+            </MessageBox>
           ))}
         </AnimatePresence>
+        {message !== "" && (
+          <MessageBlur>
+            <p>{message}</p>
+          </MessageBlur>
+        )}
       </ul>
     </Wrapper>
   )
