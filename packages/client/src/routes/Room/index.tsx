@@ -1,42 +1,27 @@
-import React from "react";
-import { useParams } from "react-router";
-import { gql, useMutation, useSubscription } from "@apollo/client";
-import ChatLog from "../../components/ChatLog";
+import React from "react"
+import { useParams } from "react-router"
+import { gql, useMutation, useSubscription } from "@apollo/client"
+import ChatLog from "../../components/ChatLog"
+import CreateMessage from "../../components/CreateMessage"
+import styled from "styled-components"
 
-const SEND_MESSAGE = gql`
-  mutation SendMessage($roomId: String!, $from: String!, $message: String!) {
-    sendMessage(roomId: $roomId, from: $from, message: $message) {
-      from
-      message
-    }
-  }
-`;
+const Wrapper = styled.div`
+  display: flex;
+  flex-flow: column;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(180deg, #ecf5ff 23.79%, #ffedec 100%), #ffedec;
+`
 
 const Room: React.FC = () => {
-  const { roomId } = useParams();
-  const [message, setMessage] = React.useState("");
-  const [sendMessage] = useMutation(SEND_MESSAGE, {
-    onCompleted: res => console.log(res)
-  });
-
-  const handleSendMessage = (e: any) => {
-    e.preventDefault();
-    sendMessage({ variables: { roomId, from: "Bella", message } });
-  };
+  const { roomId } = useParams()
 
   return (
-    <div>
+    <Wrapper>
       <ChatLog roomId={roomId} />
-      <form onSubmit={e => handleSendMessage(e)}>
-        <input
-          type="text"
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-        />
-        <button type="submit">Skicka</button>
-      </form>
-    </div>
-  );
-};
+      <CreateMessage roomId={roomId} />
+    </Wrapper>
+  )
+}
 
-export default Room;
+export default Room
