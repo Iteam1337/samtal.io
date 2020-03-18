@@ -13,9 +13,6 @@ const config = require('@iteam/config')({
 })
 
 export default {
-  AUTH0: config.get('AUTH0'),
   POSTGRES: config.get('POSTGRES'),
   JWT_SECRET: config.get('JWT_SECRET'),
-  ALLOWED_REDIRECT_URLS: config.get('ALLOWED_REDIRECT_URLS'),
-  ADDSEARCH: config.get('ADDSEARCH'),
 }
