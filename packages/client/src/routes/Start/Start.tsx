@@ -24,7 +24,6 @@ function Start() {
     <div className="App">
       <form
         onSubmit={e => {
-          console.log(input.value)
           e.preventDefault()
           createRoom({ variables: { name: input.value } })
           input.value = ""
