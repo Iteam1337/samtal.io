@@ -39,9 +39,11 @@ export type ChatMember = {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  createRoom: Maybe<Room>
-  sendMessage: Maybe<Chat>
+  createRoom?: Maybe<Room>
+  sendMessage?: Maybe<Chat>
   createChatMember: ChatMember
+  register?: Maybe<Token>
+  login?: Maybe<Token>
 }
 
 export type MutationCreateRoomArgs = {
@@ -52,6 +54,17 @@ export type MutationSendMessageArgs = {
   roomId: Scalars['String']
   from: Scalars['String']
   message: Scalars['String']
+}
+
+export type MutationRegisterArgs = {
+  name: Scalars['String']
+  email: Scalars['String']
+  password: Scalars['String']
+}
+
+export type MutationLoginArgs = {
+  email: Scalars['String']
+  password: Scalars['String']
 }
 
 export type MutationCreateChatMemberArgs = {
@@ -72,11 +85,16 @@ export type Room = {
 
 export type Subscription = {
   __typename?: 'Subscription'
-  messageSent: Maybe<Chat>
+  messageSent?: Maybe<Chat>
 }
 
 export type SubscriptionMessageSentArgs = {
   roomId: Scalars['String']
+}
+
+export type Token = {
+  __typename?: 'Token'
+  token: Scalars['String']
 }
 
 export type ResolverTypeWrapper<T> = Promise<T> | T
@@ -314,7 +332,7 @@ export type Resolvers<ContextType = any> = {
  */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>
 export type DirectiveResolvers<ContextType = any> = {
-  cacheControl: CacheControlDirectiveResolver<any, any, ContextType>
+  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>
 }
 
 /**

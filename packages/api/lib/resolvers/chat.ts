@@ -1,19 +1,9 @@
 import { chatMessage, pubsub } from '../server'
-import {
-  QueryResolvers,
-  MutationResolvers,
-  SubscriptionResolvers,
-} from '../__generated__/graphql'
+import { Resolvers } from '../__generated__/graphql'
 import { withFilter } from 'apollo-server-express'
 import { v4 as uuidv4 } from 'uuid'
 
 const CHATMESSAGE_ADDED = 'CHATMESSAGE_ADDED'
-
-interface Resolvers {
-  Query: QueryResolvers
-  Mutation: MutationResolvers
-  Subscription: SubscriptionResolvers
-}
 
 export const resolvers: Resolvers = {
   Query: {

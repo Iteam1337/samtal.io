@@ -1,6 +1,10 @@
 import { gql } from 'apollo-server-express'
 
 export const typeDefs = gql`
+  type Token {
+    token: String!
+  }
+
   type Chat {
     from: String!
     message: String!
@@ -25,6 +29,8 @@ export const typeDefs = gql`
     createRoom(name: String!): Room
     sendMessage(roomId: String!, from: String!, message: String!): Chat
     createChatMember(roomId: String!, name: String!): ChatMember!
+    register(name: String!, email: String!, password: String!): Token
+    login(email: String!, password: String!): Token
   }
 
   type Subscription {
