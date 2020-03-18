@@ -15,7 +15,7 @@ const MESSAGES_SUBSCRIPTION = gql`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column-reverse;
-  height: 85vh;
+  height: 70vh;
   overflow: auto;
   max-height: 100vh;
   align-items: flex-end;
@@ -47,7 +47,7 @@ const MessageBox = styled(motion.li)`
 const Message = styled.div`
   border-radius: 10px;
   width: fit-content;
-  padding: 2px 10px;
+  padding: 2px 15px 2px 10px;
   background: white;
   font-size: 14px;
   align-self: flex-end;
@@ -80,6 +80,7 @@ const ChatLog: React.FC<ChatLogProps> = ({ roomId, message }) => {
     variables: { roomId },
   })
   const [chatLog, updateChatLog] = React.useState<ChatMessage[]>([])
+
   React.useEffect(() => {
     if (data) {
       updateChatLog([...chatLog, data.messageSent])
