@@ -18,7 +18,8 @@ const Lobby: React.FC = () => {
   const [createChatMember] = useMutation(CREATE_CHAT_MEMBER, {
     onCompleted: res => {
       navigate(`/room/${roomId}`)
-      localStorage.setItem("member", res.id)
+      localStorage.setItem("member_name", res.createChatMember.name)
+      localStorage.setItem("member_id", res.createChatMember.id)
     },
   })
 

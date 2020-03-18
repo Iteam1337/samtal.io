@@ -39,24 +39,25 @@ const Wrapper = styled.div`
 `
 
 interface CreateMessageProps {
+  from?: String
   roomId?: String
   message: string
   setMessage: (value: any) => void
 }
 
 const CreateMessage: React.FC<CreateMessageProps> = ({
+  from,
   roomId,
   message,
   setMessage,
 }) => {
-  // const [message, setMessage] = React.useState("")
   const [sendMessage] = useMutation(SEND_MESSAGE, {
     onCompleted: res => console.log(res),
   })
 
   const handleSendMessage = (e: any) => {
     e.preventDefault()
-    sendMessage({ variables: { roomId, from: "Bella", message } })
+    sendMessage({ variables: { roomId, from, message } })
     setMessage("")
   }
   return (
