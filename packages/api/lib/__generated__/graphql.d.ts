@@ -30,10 +30,18 @@ export type Chat = {
   message: Scalars['String']
 }
 
+export type ChatMember = {
+  __typename?: 'ChatMember'
+  roomId: Scalars['String']
+  name: Scalars['String']
+  id: Scalars['String']
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   createRoom: Maybe<Room>
   sendMessage: Maybe<Chat>
+  createChatMember: ChatMember
 }
 
 export type MutationCreateRoomArgs = {
@@ -44,6 +52,11 @@ export type MutationSendMessageArgs = {
   roomId: Scalars['String']
   from: Scalars['String']
   message: Scalars['String']
+}
+
+export type MutationCreateChatMemberArgs = {
+  roomId: Scalars['String']
+  name: Scalars['String']
 }
 
 export type Query = {
@@ -174,6 +187,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>
   Mutation: ResolverTypeWrapper<{}>
   Room: ResolverTypeWrapper<Room>
+  ChatMember: ResolverTypeWrapper<ChatMember>
   Subscription: ResolverTypeWrapper<{}>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   CacheControlScope: CacheControlScope
@@ -188,6 +202,7 @@ export type ResolversParentTypes = {
   String: Scalars['String']
   Mutation: {}
   Room: Room
+  ChatMember: ChatMember
   Subscription: {}
   Boolean: Scalars['Boolean']
   CacheControlScope: CacheControlScope
@@ -213,6 +228,15 @@ export type ChatResolvers<
   message: Resolver<ResolversTypes['String'], ParentType, ContextType>
 }
 
+export type ChatMemberResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ChatMember'] = ResolversParentTypes['ChatMember']
+> = {
+  roomId: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  name: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  id: Resolver<ResolversTypes['String'], ParentType, ContextType>
+}
+
 export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
@@ -228,6 +252,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationSendMessageArgs, 'roomId' | 'from' | 'message'>
+  >
+  createChatMember: Resolver<
+    ResolversTypes['ChatMember'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateChatMemberArgs, 'roomId' | 'name'>
   >
 }
 
@@ -270,6 +300,7 @@ export interface UploadScalarConfig
 
 export type Resolvers<ContextType = any> = {
   Chat: ChatResolvers<ContextType>
+  ChatMember: ChatMemberResolvers<ContextType>
   Mutation: MutationResolvers<ContextType>
   Query: QueryResolvers<ContextType>
   Room: RoomResolvers<ContextType>
