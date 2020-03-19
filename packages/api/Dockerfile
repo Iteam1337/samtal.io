@@ -1,4 +1,4 @@
-FROM node:12 as base
+FROM node:12.16-alpine as base
 ARG cache=1
 
 WORKDIR /app
@@ -14,7 +14,7 @@ COPY tsconfig.json ./
 
 RUN npm run build
 
-FROM node:12
+FROM node:12.16-alpine
 
 ENV USER=api-user
 RUN adduser --disabled-password --gecos "" $USER
