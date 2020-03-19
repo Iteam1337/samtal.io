@@ -1,30 +1,29 @@
 import express from 'express'
 import { ApolloServer, PubSub, IResolvers } from 'apollo-server-express'
-import { resolvers as queueResolvers } from './resolvers/chat'
+import { resolvers as chatResolvers } from './resolvers/chat'
 import { resolvers as userResolvers } from './resolvers/user'
 import { typeDefs } from './defs'
 import merge from 'lodash.merge'
 import http from 'http'
-import { Chat } from './__generated__/graphql'
 import { db } from './adapters/postgres'
 import cors from 'cors'
 import { SamtalContext } from './types'
+import { AuthDirective } from 'graphql-directive-auth'
+
+process.env.APP_SECRET = 'this is jwt secret'
 
 export const pubsub = new PubSub()
 
-export const chatMessage: Chat[] = [
-  {
-    from: 'Kalle',
-    message: 'Hej',
-  },
-]
-
 const server = new ApolloServer({
   typeDefs: [typeDefs],
-  resolvers: merge(queueResolvers, userResolvers) as IResolvers<
+  resolvers: merge(chatResolvers, userResolvers) as IResolvers<
     any,
     SamtalContext
   >,
+  schemaDirectives: {
+    // to use @hasRole and @isAuthenticated directives
+    ...AuthDirective(),
+  },
   context: ({ req }) => ({
     db,
     req,

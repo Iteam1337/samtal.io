@@ -4,16 +4,24 @@ import { jwtSign } from '../utils/auth'
 import { AuthenticationError } from 'apollo-server-express'
 
 export const resolvers: Resolvers = {
+  Query: {
+    user: async (_, _args, { auth, db }) =>
+      db
+        .select('name', 'email')
+        .from('users')
+        .where('email', auth.email)
+        .first(),
+  },
   Mutation: {
-    register: async (_, { name, email, password }, { db }) => {
+    register: async (_, { input }, { db }) => {
       try {
         await db('users').insert({
-          email: email,
-          name: name,
-          password: encrypt(password),
+          email: input.email,
+          name: input.name,
+          password: encrypt(input.password),
         })
 
-        const token = jwtSign(name, email)
+        const token = jwtSign(input.name, input.email)
 
         return {
           token,
@@ -22,15 +30,15 @@ export const resolvers: Resolvers = {
         throw new Error('Something went wrong')
       }
     },
-    login: async (_, { email, password }, { db }) => {
+    login: async (_, { input }, { db }) => {
       try {
         const user = await db
           .select('name', 'email', 'password')
           .from('users')
-          .where('email', email)
+          .where('email', input.email)
           .first()
 
-        if (!user || encrypt(password) !== user.password) {
+        if (!user || encrypt(input.password) !== user.password) {
           throw new AuthenticationError('Wrong email or password')
         }
 

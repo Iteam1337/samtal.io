@@ -23,6 +23,7 @@
     "apollo-server-express": "2.9.6",
     "cors": "^2.8.5",
     "express": "4.17.1",
+    "graphql-directive-auth": "^0.3.2",
     "jsonwebtoken": "^8.5.1",
     "knex": "0.20.11",
     "lodash.merge": "4.6.2",
