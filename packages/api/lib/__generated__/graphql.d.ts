@@ -32,8 +32,10 @@ export type Chat = {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  createRoom: Maybe<Room>
-  sendMessage: Maybe<Chat>
+  createRoom?: Maybe<Room>
+  sendMessage?: Maybe<Chat>
+  register?: Maybe<Token>
+  login?: Maybe<Token>
 }
 
 export type MutationCreateRoomArgs = {
@@ -44,6 +46,17 @@ export type MutationSendMessageArgs = {
   roomId: Scalars['String']
   from: Scalars['String']
   message: Scalars['String']
+}
+
+export type MutationRegisterArgs = {
+  name: Scalars['String']
+  email: Scalars['String']
+  password: Scalars['String']
+}
+
+export type MutationLoginArgs = {
+  email: Scalars['String']
+  password: Scalars['String']
 }
 
 export type Query = {
@@ -59,11 +72,16 @@ export type Room = {
 
 export type Subscription = {
   __typename?: 'Subscription'
-  messageSent: Maybe<Chat>
+  messageSent?: Maybe<Chat>
 }
 
 export type SubscriptionMessageSentArgs = {
   roomId: Scalars['String']
+}
+
+export type Token = {
+  __typename?: 'Token'
+  token: Scalars['String']
 }
 
 export type ResolverTypeWrapper<T> = Promise<T> | T
@@ -174,6 +192,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>
   Mutation: ResolverTypeWrapper<{}>
   Room: ResolverTypeWrapper<Room>
+  Token: ResolverTypeWrapper<Token>
   Subscription: ResolverTypeWrapper<{}>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   CacheControlScope: CacheControlScope
@@ -188,6 +207,7 @@ export type ResolversParentTypes = {
   String: Scalars['String']
   Mutation: {}
   Room: Room
+  Token: Token
   Subscription: {}
   Boolean: Scalars['Boolean']
   CacheControlScope: CacheControlScope
@@ -200,8 +220,8 @@ export type CacheControlDirectiveResolver<
   Parent,
   ContextType = any,
   Args = {
-    maxAge: Maybe<Maybe<Scalars['Int']>>
-    scope: Maybe<Maybe<CacheControlScope>>
+    maxAge?: Maybe<Maybe<Scalars['Int']>>
+    scope?: Maybe<Maybe<CacheControlScope>>
   }
 > = DirectiveResolverFn<Result, Parent, ContextType, Args>
 
@@ -209,25 +229,37 @@ export type ChatResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Chat'] = ResolversParentTypes['Chat']
 > = {
-  from: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  message: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  from?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>
 }
 
 export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
-  createRoom: Resolver<
+  createRoom?: Resolver<
     Maybe<ResolversTypes['Room']>,
     ParentType,
     ContextType,
     RequireFields<MutationCreateRoomArgs, 'name'>
   >
-  sendMessage: Resolver<
+  sendMessage?: Resolver<
     Maybe<ResolversTypes['Chat']>,
     ParentType,
     ContextType,
     RequireFields<MutationSendMessageArgs, 'roomId' | 'from' | 'message'>
+  >
+  register?: Resolver<
+    Maybe<ResolversTypes['Token']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationRegisterArgs, 'name' | 'email' | 'password'>
+  >
+  login?: Resolver<
+    Maybe<ResolversTypes['Token']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationLoginArgs, 'email' | 'password'>
   >
 }
 
@@ -235,7 +267,7 @@ export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
-  chatlog: Resolver<
+  chatlog?: Resolver<
     Array<Maybe<ResolversTypes['Chat']>>,
     ParentType,
     ContextType
@@ -246,15 +278,15 @@ export type RoomResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']
 > = {
-  id: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  name: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
 }
 
 export type SubscriptionResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']
 > = {
-  messageSent: SubscriptionResolver<
+  messageSent?: SubscriptionResolver<
     Maybe<ResolversTypes['Chat']>,
     'messageSent',
     ParentType,
@@ -263,18 +295,26 @@ export type SubscriptionResolvers<
   >
 }
 
+export type TokenResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']
+> = {
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+}
+
 export interface UploadScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload'
 }
 
 export type Resolvers<ContextType = any> = {
-  Chat: ChatResolvers<ContextType>
-  Mutation: MutationResolvers<ContextType>
-  Query: QueryResolvers<ContextType>
-  Room: RoomResolvers<ContextType>
-  Subscription: SubscriptionResolvers<ContextType>
-  Upload: GraphQLScalarType
+  Chat?: ChatResolvers<ContextType>
+  Mutation?: MutationResolvers<ContextType>
+  Query?: QueryResolvers<ContextType>
+  Room?: RoomResolvers<ContextType>
+  Subscription?: SubscriptionResolvers<ContextType>
+  Token?: TokenResolvers<ContextType>
+  Upload?: GraphQLScalarType
 }
 
 /**
@@ -283,7 +323,7 @@ export type Resolvers<ContextType = any> = {
  */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>
 export type DirectiveResolvers<ContextType = any> = {
-  cacheControl: CacheControlDirectiveResolver<any, any, ContextType>
+  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>
 }
 
 /**
