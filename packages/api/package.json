@@ -10,7 +10,9 @@
     "dev": "ts-node-dev --no-notify --ignore-watch node_modules lib/server.ts",
     "generate": "graphql-codegen --config codegen.yml",
     "migrate:up": "knex migrate:latest --env dev",
-    "migrate:down": "knex migrate:rollback --all --env dev"
+    "migrate:down": "knex migrate:rollback --all --env dev",
+    "build": "tsc",
+    "start": "node build/lib/server.js"
   },
   "keywords": [
     "graphql",
@@ -19,6 +21,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@iteam/config": "^12.1.0",
     "@types/jsonwebtoken": "^8.3.8",
     "apollo-server-express": "2.9.6",
     "cors": "^2.8.5",
