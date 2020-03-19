@@ -1,6 +1,7 @@
 import React from "react"
 import { gql, useMutation } from "@apollo/client"
 import { useParams, useNavigate } from "react-router-dom"
+import styled from "styled-components"
 
 const CREATE_CHAT_MEMBER = gql`
   mutation CreateChatMember($roomId: String!, $name: String!) {
@@ -9,6 +10,15 @@ const CREATE_CHAT_MEMBER = gql`
       id
     }
   }
+`
+
+const Wrapper = styled.div`
+  background: #428cfb;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const Lobby: React.FC = () => {
@@ -28,7 +38,7 @@ const Lobby: React.FC = () => {
     createChatMember({ variables: { name: chatMemberName, roomId } })
   }
   return (
-    <div>
+    <Wrapper>
       <form onSubmit={event => handleSubmit(event)}>
         <input
           type="text"
@@ -37,7 +47,7 @@ const Lobby: React.FC = () => {
         />
         <button type="submit">Join room</button>
       </form>
-    </div>
+    </Wrapper>
   )
 }
 
