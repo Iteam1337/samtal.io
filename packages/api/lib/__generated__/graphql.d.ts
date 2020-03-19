@@ -38,7 +38,7 @@ export type ChatMessage = {
 
 export type CreateRoomInput = {
   name: Scalars['String'],
-  startTime?: Maybe<Scalars['DateTime']>,
+  start?: Maybe<Scalars['DateTime']>,
   agenda?: Maybe<Array<Maybe<AgendaInput>>>,
 };
 
@@ -91,7 +91,7 @@ export type Room = {
    __typename?: 'Room',
   id: Scalars['String'],
   name: Scalars['String'],
-  startTime?: Maybe<Scalars['DateTime']>,
+  start?: Maybe<Scalars['DateTime']>,
   agenda?: Maybe<Array<Maybe<Agenda>>>,
 };
 
@@ -121,7 +121,7 @@ export type User = {
    __typename?: 'User',
   name: Scalars['String'],
   email: Scalars['String'],
-  rooms: Array<Maybe<Room>>,
+  rooms?: Maybe<Array<Maybe<Room>>>,
 };
 
 
@@ -271,7 +271,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type RoomResolvers<ContextType = any, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  startTime?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  start?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   agenda?: Resolver<Maybe<Array<Maybe<ResolversTypes['Agenda']>>>, ParentType, ContextType>,
 };
 
@@ -290,7 +290,7 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  rooms?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType>,
+  rooms?: Resolver<Maybe<Array<Maybe<ResolversTypes['Room']>>>, ParentType, ContextType>,
 };
 
 export type Resolvers<ContextType = any> = {

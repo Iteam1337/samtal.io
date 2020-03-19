@@ -17,9 +17,9 @@ export const resolvers: Resolvers = {
         .insert({
           name: input.name,
           owner_id: user.id,
-          start_time: input.startTime,
+          start: input.start,
         })
-        .returning(['id', 'name', 'start_time'])
+        .returning(['id', 'name', 'start'])
 
       let newRoomAgenda = null
 
@@ -37,7 +37,7 @@ export const resolvers: Resolvers = {
       return {
         id: newRoom.id,
         name: newRoom.name,
-        startTime: newRoom.start_time,
+        start: newRoom.start,
         agenda: newRoomAgenda,
       }
     },

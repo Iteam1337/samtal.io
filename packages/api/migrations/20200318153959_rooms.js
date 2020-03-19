@@ -8,7 +8,7 @@ exports.up = knex => {
         .defaultTo(knex.raw('uuid_generate_v4()'))
       table.string('name', 1000).notNullable()
       table.uuid('owner_id').notNullable()
-      table.timestamp('start_time')
+      table.timestamp('start')
       table
         .timestamp('created_at')
         .defaultTo(knex.fn.now())

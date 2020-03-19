@@ -18,7 +18,7 @@ export const typeDefs = gql`
   type User {
     name: String!
     email: String!
-    rooms: [Room]!
+    rooms: [Room]
   }
 
   type ChatMessage {
@@ -33,7 +33,7 @@ export const typeDefs = gql`
   type Room {
     id: String!
     name: String!
-    startTime: DateTime
+    start: DateTime
     agenda: [Agenda]
   }
 
@@ -43,7 +43,7 @@ export const typeDefs = gql`
 
   input CreateRoomInput {
     name: String!
-    startTime: DateTime
+    start: DateTime
     agenda: [AgendaInput]
   }
 

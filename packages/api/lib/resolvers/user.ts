@@ -5,12 +5,26 @@ import { AuthenticationError } from 'apollo-server-express'
 
 export const resolvers: Resolvers = {
   Query: {
-    user: async (_, _args, { auth, db }) =>
-      db
-        .select('name', 'email')
+    user: async (_, _args, { auth, db }) => {
+      const user = await db
+        .select('id', 'name', 'email')
         .from('users')
         .where('email', auth.email)
-        .first(),
+        .first()
+
+      const userRooms = await db
+        .select('id', 'name', 'start')
+        .from('rooms')
+        .where('owner_id', user.id)
+
+      console.log(user)
+      console.log(userRooms)
+
+      return {
+        ...user,
+        rooms: userRooms,
+      }
+    },
   },
   Mutation: {
     register: async (_, { input }, { db }) => {
