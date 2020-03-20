@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import ChatLog from "../../components/ChatLog"
 import CreateMessage from "../../components/CreateMessage"
 import styled from "styled-components"
+import Utils, { StorageKeys } from "../../utils"
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -28,13 +29,15 @@ const Room: React.FC = () => {
     id: "",
   })
 
+  const storageChatMember = Utils.getStorage(StorageKeys.ChatMember)
+
   React.useEffect(() => {
-    if (!localStorage.getItem("member_id")) {
+    if (!storageChatMember) {
       navigate(`/lobby/${roomId}`)
     } else {
       setChatMember({
-        id: localStorage.getItem("member_id") || "",
-        name: localStorage.getItem("member_name") || "",
+        id: storageChatMember.id,
+        name: storageChatMember.name,
       })
     }
   }, [])

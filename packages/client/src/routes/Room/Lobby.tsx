@@ -2,6 +2,7 @@ import React from "react"
 import { gql, useMutation } from "@apollo/client"
 import { useParams, useNavigate } from "react-router-dom"
 import styled from "styled-components"
+import Utils, { StorageKeys } from "../../utils"
 
 const CREATE_CHAT_MEMBER = gql`
   mutation CreateChatMember($roomId: String!, $name: String!) {
@@ -27,9 +28,11 @@ const Lobby: React.FC = () => {
   const [chatMemberName, setChatMemberName] = React.useState("")
   const [createChatMember] = useMutation(CREATE_CHAT_MEMBER, {
     onCompleted: res => {
+      Utils.setStorage(StorageKeys.ChatMember, {
+        name: res.createChatMember.name,
+        id: res.createChatMember.id,
+      })
       navigate(`/room/${roomId}`)
-      localStorage.setItem("member_name", res.createChatMember.name)
-      localStorage.setItem("member_id", res.createChatMember.id)
     },
   })
 
