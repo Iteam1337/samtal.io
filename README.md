@@ -1,1 +1,7 @@
-# samtal.io
+# Samtal.io
+
+## Get started
+
+```
+npx lerna bootstrap
+```
