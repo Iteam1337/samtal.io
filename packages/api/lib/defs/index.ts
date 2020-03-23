@@ -75,7 +75,7 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    createRoom(input: CreateRoomInput!): Room @isAuthenticated
+    createRoom(input: CreateRoomInput!): Room! @isAuthenticated
     createChatMember(roomId: String!, name: String!): ChatMember!
     sendMessage(input: SendMessageInput!): ChatMessage
     register(input: RegisterInput!): Token
