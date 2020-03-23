@@ -1,15 +1,6 @@
 import React from "react"
-import { gql, useMutation } from "@apollo/client"
 import styled from "styled-components"
-
-const SEND_MESSAGE = gql`
-  mutation SendMessage($input: SendMessageInput!) {
-    sendMessage(input: $input) {
-      from
-      message
-    }
-  }
-`
+import { useField } from "formik"
 
 const Input = styled.input`
   border: 1px solid #c8cdd6;
@@ -39,46 +30,15 @@ const Wrapper = styled.div`
 `
 
 interface CreateMessageProps {
-  from?: String
-  roomId?: String
-  message: string
-  setMessage: (value: any) => void
+  name: string
 }
 
-const CreateMessage: React.FC<CreateMessageProps> = ({
-  from,
-  roomId,
-  message,
-  setMessage,
-}) => {
-  const [sendMessage] = useMutation(SEND_MESSAGE, {
-    onCompleted: res => console.log(res),
-  })
+const CreateMessage: React.FC<CreateMessageProps> = props => {
+  const [field] = useField(props)
 
-  const handleSendMessage = (e: any) => {
-    e.preventDefault()
-    sendMessage({
-      variables: {
-        input: {
-          roomId,
-          from,
-          message,
-        },
-      },
-    })
-    setMessage("")
-  }
   return (
     <Wrapper>
-      <form onSubmit={e => handleSendMessage(e)}>
-        <Input
-          type="text"
-          placeholder="Skriv ditt inlägg..."
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-        />
-        {/* <button type="submit">Skicka</button> */}
-      </form>
+      <Input type="text" placeholder="Skriv ditt inlägg..." {...field} />
     </Wrapper>
   )
 }

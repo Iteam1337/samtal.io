@@ -125,3 +125,52 @@ export type User = {
   email: Scalars["String"]
   rooms?: Maybe<Array<Maybe<Room>>>
 }
+
+export type MessageSentSubscriptionVariables = {
+  roomId: Scalars["String"]
+}
+
+export type MessageSentSubscription = { __typename?: "Subscription" } & {
+  messageSent?: Maybe<
+    { __typename?: "ChatMessage" } & Pick<ChatMessage, "message" | "from">
+  >
+}
+
+export type SendMessageMutationVariables = {
+  input: SendMessageInput
+}
+
+export type SendMessageMutation = { __typename?: "Mutation" } & {
+  sendMessage: { __typename?: "ChatMessage" } & Pick<
+    ChatMessage,
+    "from" | "message"
+  >
+}
+
+export type LoginMutationVariables = {
+  input: LoginInput
+}
+
+export type LoginMutation = { __typename?: "Mutation" } & {
+  login: { __typename?: "Token" } & Pick<Token, "token">
+}
+
+export type CreateRoomMutationVariables = {
+  input: CreateRoomInput
+}
+
+export type CreateRoomMutation = { __typename?: "Mutation" } & {
+  createRoom: { __typename?: "Room" } & Pick<Room, "id" | "name">
+}
+
+export type CreateChatMemberMutationVariables = {
+  roomId: Scalars["String"]
+  name: Scalars["String"]
+}
+
+export type CreateChatMemberMutation = { __typename?: "Mutation" } & {
+  createChatMember: { __typename?: "ChatMember" } & Pick<
+    ChatMember,
+    "name" | "id"
+  >
+}

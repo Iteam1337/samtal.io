@@ -1,57 +1,67 @@
-import React, { useState } from "react"
 import { gql, useMutation } from "@apollo/client"
+import React from "react"
 import { useNavigate } from "react-router-dom"
-import { setStorage, StorageKeys } from "../../utils/localStorage"
+import { Formik, Form, Field, ErrorMessage } from "formik"
+import * as Yup from "yup"
+import { useLocalStorage } from "@iteam/hooks"
+import {
+  LoginMutation,
+  LoginMutationVariables,
+} from "../../__generated__/types"
 
-const LOGIN = gql`
-  mutation login($input: LoginInput!) {
+export const LOGIN = gql`
+  mutation Login($input: LoginInput!) {
     login(input: $input) {
       token
     }
   }
 `
 
+const LoginSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email")
+    .required("Required"),
+  password: Yup.string().required("Required"),
+})
+
 const Login: React.FC = () => {
   const navigate = useNavigate()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [, setToken] = useLocalStorage("token")
 
-  const [login] = useMutation(LOGIN, {
+  const [login] = useMutation<LoginMutation, LoginMutationVariables>(LOGIN, {
     onCompleted: ({ login }) => {
-      setStorage(StorageKeys.Token, login.token)
-
+      setToken(login.token)
       navigate("/")
     },
   })
 
-  const handleSendMessage = (e: any) => {
-    e.preventDefault()
-    login({
-      variables: {
-        input: {
-          email,
-          password,
-        },
-      },
-    })
-  }
-
   return (
-    <form onSubmit={e => handleSendMessage(e)}>
-      <input
-        type="text"
-        placeholder="email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="lösenord"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <button type="submit">Logga in</button>
-    </form>
+    <Formik
+      initialValues={{ email: "", password: "" }}
+      validationSchema={LoginSchema}
+      onSubmit={input => {
+        login({
+          variables: {
+            input,
+          },
+        })
+      }}
+    >
+      <Form>
+        <label htmlFor="email">Email</label>
+        <Field id="email" name="email" type="email" />
+        <ErrorMessage name="email" />
+        <label htmlFor="password">Password</label>
+        <Field
+          id="password"
+          name="password"
+          type="password"
+          placeholder="lösenord"
+        />
+        <ErrorMessage name="password" />
+        <button type="submit">Login</button>
+      </Form>
+    </Formik>
   )
 }
 

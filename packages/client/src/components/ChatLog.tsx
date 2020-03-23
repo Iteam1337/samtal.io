@@ -3,10 +3,11 @@ import { gql, useSubscription } from "@apollo/client"
 import { motion, AnimatePresence } from "framer-motion"
 import styled from "styled-components"
 import {
-  Subscription,
   ChatMessage,
-  SubscriptionMessageSentArgs,
+  MessageSentSubscription,
+  MessageSentSubscriptionVariables,
 } from "../__generated__/types"
+import { useField } from "formik"
 
 const MESSAGES_SUBSCRIPTION = gql`
   subscription MessageSent($roomId: String!) {
@@ -74,22 +75,22 @@ const MessageBlur = styled.div`
 
 interface ChatLogProps {
   roomId: string
-  message: string
 }
 
-const ChatLog: React.FC<ChatLogProps> = ({ roomId, message }) => {
+const ChatLog: React.FC<ChatLogProps> = ({ roomId }) => {
+  const [message] = useField("message")
   const [chatLog, updateChatLog] = React.useState<ChatMessage[]>([])
-  const { error } = useSubscription<Subscription, SubscriptionMessageSentArgs>(
-    MESSAGES_SUBSCRIPTION,
-    {
-      variables: { roomId },
-      onSubscriptionData: ({ subscriptionData }) => {
-        if (subscriptionData.data?.messageSent) {
-          updateChatLog([...chatLog, subscriptionData.data.messageSent])
-        }
-      },
-    }
-  )
+  const { error } = useSubscription<
+    MessageSentSubscription,
+    MessageSentSubscriptionVariables
+  >(MESSAGES_SUBSCRIPTION, {
+    variables: { roomId },
+    onSubscriptionData: ({ subscriptionData }) => {
+      if (subscriptionData.data?.messageSent) {
+        updateChatLog([...chatLog, subscriptionData.data.messageSent])
+      }
+    },
+  })
 
   if (error) {
     return <div>Error</div>
@@ -116,9 +117,9 @@ const ChatLog: React.FC<ChatLogProps> = ({ roomId, message }) => {
             </MessageBox>
           ))}
         </AnimatePresence>
-        {message !== "" && (
+        {message.value !== "" && (
           <MessageBlur>
-            <p>{message}</p>
+            <p>{message.value}</p>
           </MessageBlur>
         )}
       </ul>
