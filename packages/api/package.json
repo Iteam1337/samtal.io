@@ -12,7 +12,8 @@
     "migrate:up": "knex migrate:latest --env dev",
     "migrate:down": "knex migrate:rollback --all --env dev",
     "build": "tsc",
-    "start": "node build/lib/server.js"
+    "start": "node build/lib/server.js",
+    "seed:dev": "knex seed:run --env dev"
   },
   "keywords": [
     "graphql",
