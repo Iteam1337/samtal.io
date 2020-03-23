@@ -1,13 +1,33 @@
 import { gql } from 'apollo-server-express'
 
 export const typeDefs = gql`
+  """
+  Directives
+  """
+  directive @isAuthenticated on FIELD | FIELD_DEFINITION
+
+  """
+  An ISO-8601 encoded UTC date string.
+  """
+  scalar DateTime
+
   type Token {
     token: String!
   }
 
-  type Chat {
+  type User {
+    name: String!
+    email: String!
+    rooms: [Room]
+  }
+
+  type ChatMessage {
     from: String!
     message: String!
+  }
+
+  type Agenda {
+    title: String!
   }
 
   type ChatMember {
@@ -19,21 +39,50 @@ export const typeDefs = gql`
   type Room {
     id: String!
     name: String!
+    start: DateTime
+    agenda: [Agenda]
+  }
+
+  input AgendaInput {
+    title: String!
+  }
+
+  input CreateRoomInput {
+    name: String!
+    start: DateTime
+    agenda: [AgendaInput]
+  }
+
+  input SendMessageInput {
+    roomId: String!
+    from: String!
+    message: String!
+  }
+
+  input RegisterInput {
+    email: String!
+    password: String!
+    name: String!
+  }
+
+  input LoginInput {
+    email: String!
+    password: String!
   }
 
   type Query {
-    chatlog: [Chat]!
+    user: User @isAuthenticated
   }
 
   type Mutation {
-    createRoom(name: String!): Room
-    sendMessage(roomId: String!, from: String!, message: String!): Chat
+    createRoom(input: CreateRoomInput!): Room! @isAuthenticated
     createChatMember(roomId: String!, name: String!): ChatMember!
-    register(name: String!, email: String!, password: String!): Token
-    login(email: String!, password: String!): Token
+    sendMessage(input: SendMessageInput!): ChatMessage!
+    register(input: RegisterInput!): Token!
+    login(input: LoginInput!): Token!
   }
 
   type Subscription {
-    messageSent(roomId: String!): Chat
+    messageSent(roomId: String!): ChatMessage
   }
 `

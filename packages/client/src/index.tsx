@@ -1,17 +1,18 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import "./index.css"
-import App from "./routes/App"
 import {
-  ApolloProvider,
   ApolloClient,
-  split,
+  ApolloLink,
+  ApolloProvider,
   HttpLink,
   InMemoryCache,
+  split,
 } from "@apollo/client"
-import { WebSocketLink } from "@apollo/link-ws"
 import { getMainDefinition } from "@apollo/client/utilities"
+import { WebSocketLink } from "@apollo/link-ws"
+import React from "react"
+import ReactDOM from "react-dom"
 import { BrowserRouter as Router } from "react-router-dom"
+import "./index.css"
+import App from "./routes/App"
 
 const httpLink = new HttpLink({
   uri:
@@ -24,6 +25,17 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true,
   },
+})
+
+const authLink = new ApolloLink((operation, forward) => {
+  const token = localStorage.getItem("token")
+  operation.setContext({
+    headers: {
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  })
+
+  return forward(operation)
 })
 
 const link = split(
@@ -40,7 +52,7 @@ const link = split(
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link,
+  link: ApolloLink.concat(authLink, link),
 })
 
 const AppRoot = () => (

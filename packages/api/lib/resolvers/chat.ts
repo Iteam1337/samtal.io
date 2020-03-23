@@ -1,4 +1,4 @@
-import { chatMessage, pubsub } from '../server'
+import { pubsub } from '../server'
 import { Resolvers } from '../__generated__/graphql'
 import { withFilter } from 'apollo-server-express'
 import { v4 as uuidv4 } from 'uuid'
@@ -6,25 +6,52 @@ import { v4 as uuidv4 } from 'uuid'
 const CHATMESSAGE_ADDED = 'CHATMESSAGE_ADDED'
 
 export const resolvers: Resolvers = {
-  Query: {
-    chatlog: () => chatMessage,
-  },
-
   Mutation: {
-    createRoom: async (_, { name }, { db }) => {
-      const [newRoom] = await db('rooms')
-        .returning(['id', 'name'])
-        .insert({ name: name })
+    createRoom: async (_, { input }, { auth, db }) => {
+      const user = await db
+        .select('id')
+        .from('users')
+        .where('email', auth.email)
+        .first()
 
-      return newRoom
-    },
-    sendMessage: (_, { roomId, from, message }) => {
-      const newMessage = {
-        from,
-        message,
+      const [newRoom] = await db('rooms')
+        .insert({
+          name: input.name,
+          owner_id: user.id,
+          start: input.start,
+        })
+        .returning(['id', 'name', 'start'])
+
+      let newRoomAgenda = null
+
+      if (input.agenda) {
+        const agendaWithIds = input.agenda.map((entry: any) => {
+          entry.room_id = newRoom.id
+          return entry
+        })
+
+        newRoomAgenda = await db('agenda_items')
+          .insert(agendaWithIds)
+          .returning(['title'])
       }
 
-      pubsub.publish(CHATMESSAGE_ADDED, { messageSent: newMessage, roomId })
+      return {
+        id: newRoom.id,
+        name: newRoom.name,
+        start: newRoom.start,
+        agenda: newRoomAgenda,
+      }
+    },
+    sendMessage: (_, { input }) => {
+      const newMessage = {
+        from: input.from,
+        message: input.message,
+      }
+
+      pubsub.publish(CHATMESSAGE_ADDED, {
+        messageSent: newMessage,
+        roomId: input.roomId,
+      })
 
       return newMessage
     },

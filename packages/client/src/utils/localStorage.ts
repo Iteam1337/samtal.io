@@ -1,5 +1,6 @@
 export enum StorageKeys {
   ChatMember = "chatMember",
+  Login = "login",
 }
 
 interface ChatMember {
@@ -7,9 +8,13 @@ interface ChatMember {
   id: string
 }
 
+interface Login {
+  token: string
+}
+
 export const setStorage = (
   key: StorageKeys,
-  value: ChatMember
+  value: ChatMember | Login
 ): void | boolean => {
   try {
     const serializedEntry = JSON.stringify(value)

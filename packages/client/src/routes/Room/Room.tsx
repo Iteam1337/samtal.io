@@ -1,9 +1,9 @@
 import React from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
+import styled from "styled-components"
 import ChatLog from "../../components/ChatLog"
 import CreateMessage from "../../components/CreateMessage"
-import styled from "styled-components"
-import Utils, { StorageKeys } from "../../utils"
+import { getStorage, StorageKeys } from "../../utils/localStorage"
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -29,7 +29,7 @@ const Room: React.FC = () => {
     id: "",
   })
 
-  const storageChatMember = Utils.getStorage(StorageKeys.ChatMember)
+  const storageChatMember = getStorage(StorageKeys.ChatMember)
 
   React.useEffect(() => {
     if (!storageChatMember) {

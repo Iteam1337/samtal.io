@@ -7,6 +7,16 @@ exports.up = knex => {
         .notNullable()
         .defaultTo(knex.raw('uuid_generate_v4()'))
       table.string('name', 1000).notNullable()
+      table.uuid('owner_id').notNullable()
+      table.timestamp('start')
+      table
+        .timestamp('created_at')
+        .defaultTo(knex.fn.now())
+        .notNullable()
+      table
+        .foreign('owner_id')
+        .references('id')
+        .inTable('users')
     })
   )
 }
