@@ -3,8 +3,8 @@ import { gql, useMutation } from "@apollo/client"
 import styled from "styled-components"
 
 const SEND_MESSAGE = gql`
-  mutation SendMessage($roomId: String!, $from: String!, $message: String!) {
-    sendMessage(roomId: $roomId, from: $from, message: $message) {
+  mutation SendMessage($input: SendMessageInput!) {
+    sendMessage(input: $input) {
       from
       message
     }
@@ -57,7 +57,15 @@ const CreateMessage: React.FC<CreateMessageProps> = ({
 
   const handleSendMessage = (e: any) => {
     e.preventDefault()
-    sendMessage({ variables: { roomId, from, message } })
+    sendMessage({
+      variables: {
+        input: {
+          roomId,
+          from,
+          message,
+        },
+      },
+    })
     setMessage("")
   }
   return (
