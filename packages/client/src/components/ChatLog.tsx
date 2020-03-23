@@ -2,6 +2,11 @@ import React from "react"
 import { gql, useSubscription } from "@apollo/client"
 import { motion, AnimatePresence } from "framer-motion"
 import styled from "styled-components"
+import {
+  Subscription,
+  ChatMessage,
+  SubscriptionMessageSentArgs,
+} from "../__generated__/types"
 
 const MESSAGES_SUBSCRIPTION = gql`
   subscription MessageSent($roomId: String!) {
@@ -68,26 +73,23 @@ const MessageBlur = styled.div`
 `
 
 interface ChatLogProps {
-  roomId?: string
-  message: string
-}
-
-interface ChatMessage {
-  from: string
+  roomId: string
   message: string
 }
 
 const ChatLog: React.FC<ChatLogProps> = ({ roomId, message }) => {
-  const { data, error } = useSubscription(MESSAGES_SUBSCRIPTION, {
-    variables: { roomId },
-  })
   const [chatLog, updateChatLog] = React.useState<ChatMessage[]>([])
-
-  React.useEffect(() => {
-    if (data) {
-      updateChatLog([...chatLog, data.messageSent])
+  const { error } = useSubscription<Subscription, SubscriptionMessageSentArgs>(
+    MESSAGES_SUBSCRIPTION,
+    {
+      variables: { roomId },
+      onSubscriptionData: ({ subscriptionData }) => {
+        if (subscriptionData.data?.messageSent) {
+          updateChatLog([...chatLog, subscriptionData.data.messageSent])
+        }
+      },
     }
-  }, [chatLog, data])
+  )
 
   if (error) {
     return <div>Error</div>

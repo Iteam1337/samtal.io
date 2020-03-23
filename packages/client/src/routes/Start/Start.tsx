@@ -1,12 +1,13 @@
 import React from "react"
 import CreateRoom from "../../components/CreateRoom"
 import { useNavigate } from "react-router-dom"
+import { getStorage, StorageKeys } from "../../utils/localStorage"
 
 function Start() {
   const navigate = useNavigate()
 
   React.useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!getStorage(StorageKeys.Token)) {
       navigate("/login")
     }
   }, [navigate])

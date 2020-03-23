@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { gql, useMutation } from "@apollo/client"
 import { useNavigate } from "react-router-dom"
+import { setStorage, StorageKeys } from "../../utils/localStorage"
 
 const LOGIN = gql`
   mutation login($input: LoginInput!) {
@@ -17,7 +18,7 @@ const Login: React.FC = () => {
 
   const [login] = useMutation(LOGIN, {
     onCompleted: ({ login }) => {
-      localStorage.setItem("token", login.token)
+      setStorage(StorageKeys.Token, login.token)
 
       navigate("/")
     },

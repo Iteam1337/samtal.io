@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import ChatLog from "../../components/ChatLog"
 import CreateMessage from "../../components/CreateMessage"
-import { getStorage, StorageKeys } from "../../utils/localStorage"
+import { useLocalStorage } from "@iteam/hooks"
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -24,21 +24,23 @@ const Room: React.FC = () => {
   const [message, setMessage] = React.useState("")
   const { roomId } = useParams()
   const navigate = useNavigate()
+  const [storageChatMember] = useLocalStorage("chatMember")
   const [chatMember, setChatMember] = React.useState<ChatMember>({
     name: "",
     id: "",
   })
 
-  const storageChatMember = getStorage(StorageKeys.ChatMember)
-
   React.useEffect(() => {
     if (!storageChatMember) {
       navigate(`/lobby/${roomId}`)
     } else {
-      setChatMember({
-        id: storageChatMember.id,
-        name: storageChatMember.name,
-      })
+      if (storageChatMember) {
+        const member = JSON.parse(storageChatMember)
+        setChatMember({
+          id: member.id,
+          name: member.name,
+        })
+      }
     }
   }, [navigate, roomId, storageChatMember])
 
