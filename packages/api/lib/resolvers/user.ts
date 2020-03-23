@@ -17,9 +17,6 @@ export const resolvers: Resolvers = {
         .from('rooms')
         .where('owner_id', user.id)
 
-      console.log(user)
-      console.log(userRooms)
-
       return {
         ...user,
         rooms: userRooms,
