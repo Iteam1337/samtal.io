@@ -1,22 +1,19 @@
 import React from "react"
-import "./Start.css"
 import CreateRoom from "../../components/CreateRoom"
-import Login from "../../components/Login"
+import { useNavigate } from "react-router-dom"
 
 function Start() {
-  const token = localStorage.getItem("token")
+  const navigate = useNavigate()
 
-  if (token) {
-    return (
-      <div className="App">
-        <CreateRoom />
-      </div>
-    )
-  }
+  React.useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login")
+    }
+  }, [navigate])
 
   return (
-    <div className="App">
-      <Login />
+    <div>
+      <CreateRoom />
     </div>
   )
 }

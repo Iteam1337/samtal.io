@@ -40,6 +40,7 @@ const Lobby: React.FC = () => {
     event.preventDefault()
     createChatMember({ variables: { name: chatMemberName, roomId } })
   }
+
   return (
     <Wrapper>
       <form onSubmit={event => handleSubmit(event)}>

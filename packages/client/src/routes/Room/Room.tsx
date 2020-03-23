@@ -16,8 +16,8 @@ const Header = styled.div`
 `
 
 interface ChatMember {
-  name: String
-  id: String
+  name: string
+  id: string
 }
 
 const Room: React.FC = () => {
@@ -40,7 +40,7 @@ const Room: React.FC = () => {
         name: storageChatMember.name,
       })
     }
-  }, [])
+  }, [navigate, roomId, storageChatMember])
 
   return (
     <Wrapper>

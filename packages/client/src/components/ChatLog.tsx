@@ -34,6 +34,7 @@ const MessageBox = styled(motion.li)`
 
   > div:first-of-type {
     margin-right: 5px;
+
     p {
       margin: 0;
       font-weight: 500;
@@ -59,6 +60,7 @@ const MessageBlur = styled.div`
   background: white;
   font-size: 14px;
   align-self: flex-end;
+
   p {
     color: transparent;
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
@@ -70,9 +72,9 @@ interface ChatLogProps {
   message: string
 }
 
-type ChatMessage = {
-  from: String
-  message: String
+interface ChatMessage {
+  from: string
+  message: string
 }
 
 const ChatLog: React.FC<ChatLogProps> = ({ roomId, message }) => {
@@ -85,7 +87,7 @@ const ChatLog: React.FC<ChatLogProps> = ({ roomId, message }) => {
     if (data) {
       updateChatLog([...chatLog, data.messageSent])
     }
-  }, [data])
+  }, [chatLog, data])
 
   if (error) {
     return <div>Error</div>

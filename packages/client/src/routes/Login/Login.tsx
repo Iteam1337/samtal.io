@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { gql, useMutation } from "@apollo/client"
+import { useNavigate } from "react-router-dom"
 
 const LOGIN = gql`
   mutation login($input: LoginInput!) {
@@ -10,12 +11,15 @@ const LOGIN = gql`
 `
 
 const Login: React.FC = () => {
+  const navigate = useNavigate()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   const [login] = useMutation(LOGIN, {
     onCompleted: ({ login }) => {
       localStorage.setItem("token", login.token)
+
+      navigate("/")
     },
   })
 
