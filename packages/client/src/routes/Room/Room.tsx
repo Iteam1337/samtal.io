@@ -1,9 +1,9 @@
 import React from "react"
-import { useParams } from "react-router"
-import { gql, useMutation, useSubscription } from "@apollo/client"
+import { useParams, useNavigate } from "react-router-dom"
 import ChatLog from "../../components/ChatLog"
 import CreateMessage from "../../components/CreateMessage"
 import styled from "styled-components"
+import Utils, { StorageKeys } from "../../utils"
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -15,9 +15,32 @@ const Header = styled.div`
   width: 100%;
 `
 
+interface ChatMember {
+  name: String
+  id: String
+}
+
 const Room: React.FC = () => {
   const [message, setMessage] = React.useState("")
   const { roomId } = useParams()
+  const navigate = useNavigate()
+  const [chatMember, setChatMember] = React.useState<ChatMember>({
+    name: "",
+    id: "",
+  })
+
+  const storageChatMember = Utils.getStorage(StorageKeys.ChatMember)
+
+  React.useEffect(() => {
+    if (!storageChatMember) {
+      navigate(`/lobby/${roomId}`)
+    } else {
+      setChatMember({
+        id: storageChatMember.id,
+        name: storageChatMember.name,
+      })
+    }
+  }, [])
 
   return (
     <Wrapper>
@@ -32,6 +55,7 @@ const Room: React.FC = () => {
 
       <ChatLog message={message} roomId={roomId} />
       <CreateMessage
+        from={chatMember.name}
         message={message}
         setMessage={setMessage}
         roomId={roomId}

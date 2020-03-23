@@ -17,7 +17,7 @@ function Start() {
   let navigate = useNavigate()
   let input: any
   const [createRoom] = useMutation(CREATE_ROOM, {
-    onCompleted: ({ createRoom }) => navigate(`/room/${createRoom.id}`),
+    onCompleted: ({ createRoom }) => navigate(`/lobby/${createRoom.id}`),
   })
 
   return (

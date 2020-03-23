@@ -1,11 +1,7 @@
 import knex from 'knex'
+import config from '../config'
 
 export const db = knex({
   client: 'pg',
-  connection: {
-    host: '127.0.0.1',
-    user: 'iteamadmin',
-    password: 'adminadmin1337',
-    database: 'samtalio',
-  },
+  connection: config.POSTGRES,
 })
