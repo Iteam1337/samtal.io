@@ -1,6 +1,7 @@
 import { chatMessage, pubsub } from '../server'
 import { Resolvers } from '../__generated__/graphql'
 import { withFilter } from 'apollo-server-express'
+import { v4 as uuidv4 } from 'uuid'
 
 const CHATMESSAGE_ADDED = 'CHATMESSAGE_ADDED'
 
@@ -26,6 +27,10 @@ export const resolvers: Resolvers = {
       pubsub.publish(CHATMESSAGE_ADDED, { messageSent: newMessage, roomId })
 
       return newMessage
+    },
+    createChatMember: (_, { name, roomId }) => {
+      const id = uuidv4()
+      return { name, id, roomId }
     },
   },
 
