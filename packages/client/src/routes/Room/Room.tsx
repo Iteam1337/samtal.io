@@ -1,9 +1,24 @@
 import React from "react"
+import { gql, useMutation } from "@apollo/client"
 import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import ChatLog from "../../components/ChatLog"
 import CreateMessage from "../../components/CreateMessage"
-import { getStorage, StorageKeys } from "../../utils/localStorage"
+import { useLocalStorage } from "@iteam/hooks"
+import {
+  SendMessageMutation,
+  SendMessageMutationVariables,
+} from "../../__generated__/types"
+import { Formik, Form } from "formik"
+
+const SEND_MESSAGE = gql`
+  mutation SendMessage($input: SendMessageInput!) {
+    sendMessage(input: $input) {
+      from
+      message
+    }
+  }
+`
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -16,31 +31,37 @@ const Header = styled.div`
 `
 
 interface ChatMember {
-  name: String
-  id: String
+  name: string
+  id: string
 }
 
 const Room: React.FC = () => {
-  const [message, setMessage] = React.useState("")
   const { roomId } = useParams()
   const navigate = useNavigate()
+  const [storageChatMember] = useLocalStorage("chatMember")
   const [chatMember, setChatMember] = React.useState<ChatMember>({
     name: "",
     id: "",
   })
-
-  const storageChatMember = getStorage(StorageKeys.ChatMember)
+  const [sendMessage] = useMutation<
+    SendMessageMutation,
+    SendMessageMutationVariables
+  >(SEND_MESSAGE, {
+    onCompleted: res => console.log(res),
+  })
 
   React.useEffect(() => {
     if (!storageChatMember) {
       navigate(`/lobby/${roomId}`)
     } else {
+      const member = JSON.parse(storageChatMember)
+
       setChatMember({
-        id: storageChatMember.id,
-        name: storageChatMember.name,
+        id: member.id,
+        name: member.name,
       })
     }
-  }, [])
+  }, [navigate, roomId, storageChatMember])
 
   return (
     <Wrapper>
@@ -53,13 +74,26 @@ const Room: React.FC = () => {
         </svg>
       </Header>
 
-      <ChatLog message={message} roomId={roomId} />
-      <CreateMessage
-        from={chatMember.name}
-        message={message}
-        setMessage={setMessage}
-        roomId={roomId}
-      />
+      <Formik
+        initialValues={{ message: "" }}
+        onSubmit={({ message }, form) => {
+          sendMessage({
+            variables: {
+              input: {
+                roomId,
+                from: chatMember.name,
+                message,
+              },
+            },
+          })
+          form.resetForm()
+        }}
+      >
+        <Form>
+          <ChatLog roomId={roomId} />
+          <CreateMessage name="message" />
+        </Form>
+      </Formik>
     </Wrapper>
   )
 }

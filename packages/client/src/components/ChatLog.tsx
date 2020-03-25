@@ -2,6 +2,12 @@ import React from "react"
 import { gql, useSubscription } from "@apollo/client"
 import { motion, AnimatePresence } from "framer-motion"
 import styled from "styled-components"
+import {
+  ChatMessage,
+  MessageSentSubscription,
+  MessageSentSubscriptionVariables,
+} from "../__generated__/types"
+import { useField } from "formik"
 
 const MESSAGES_SUBSCRIPTION = gql`
   subscription MessageSent($roomId: String!) {
@@ -34,6 +40,7 @@ const MessageBox = styled(motion.li)`
 
   > div:first-of-type {
     margin-right: 5px;
+
     p {
       margin: 0;
       font-weight: 500;
@@ -59,6 +66,7 @@ const MessageBlur = styled.div`
   background: white;
   font-size: 14px;
   align-self: flex-end;
+
   p {
     color: transparent;
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
@@ -66,26 +74,23 @@ const MessageBlur = styled.div`
 `
 
 interface ChatLogProps {
-  roomId?: string
-  message: string
+  roomId: string
 }
 
-type ChatMessage = {
-  from: String
-  message: String
-}
-
-const ChatLog: React.FC<ChatLogProps> = ({ roomId, message }) => {
-  const { data, error } = useSubscription(MESSAGES_SUBSCRIPTION, {
-    variables: { roomId },
-  })
+const ChatLog: React.FC<ChatLogProps> = ({ roomId }) => {
+  const [message] = useField("message")
   const [chatLog, updateChatLog] = React.useState<ChatMessage[]>([])
-
-  React.useEffect(() => {
-    if (data) {
-      updateChatLog([...chatLog, data.messageSent])
-    }
-  }, [data])
+  const { error } = useSubscription<
+    MessageSentSubscription,
+    MessageSentSubscriptionVariables
+  >(MESSAGES_SUBSCRIPTION, {
+    variables: { roomId },
+    onSubscriptionData: ({ subscriptionData }) => {
+      if (subscriptionData.data?.messageSent) {
+        updateChatLog([...chatLog, subscriptionData.data.messageSent])
+      }
+    },
+  })
 
   if (error) {
     return <div>Error</div>
@@ -112,9 +117,9 @@ const ChatLog: React.FC<ChatLogProps> = ({ roomId, message }) => {
             </MessageBox>
           ))}
         </AnimatePresence>
-        {message !== "" && (
+        {message.value !== "" && (
           <MessageBlur>
-            <p>{message}</p>
+            <p>{message.value}</p>
           </MessageBlur>
         )}
       </ul>
