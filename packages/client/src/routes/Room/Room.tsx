@@ -66,7 +66,13 @@ const Room: React.FC = () => {
   return (
     <Wrapper>
       <Header>
-        <svg width="100%" height={136} viewBox="0 0 375 136" fill="none">
+        <svg
+          width="100%"
+          height={152.5}
+          viewBox="0 0 375 136"
+          fill="none"
+          preserveAspectRatio="xMidYMax slice"
+        >
           <path
             d="M0-16.5h375V136s-59.5-30-187.5-30S0 136 0 136V-16.5z"
             fill="#428CFB"
