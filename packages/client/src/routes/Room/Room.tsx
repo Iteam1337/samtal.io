@@ -10,6 +10,7 @@ import {
   SendMessageMutationVariables,
 } from "../../__generated__/types"
 import { Formik, Form } from "formik"
+import * as Yup from "yup"
 
 const SEND_MESSAGE = gql`
   mutation SendMessage($input: SendMessageInput!) {
@@ -19,6 +20,12 @@ const SEND_MESSAGE = gql`
     }
   }
 `
+
+const RoomSchema = Yup.object().shape({
+  message: Yup.string()
+    .required("Required")
+    .max(280),
+})
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -47,7 +54,7 @@ const Room: React.FC = () => {
     SendMessageMutation,
     SendMessageMutationVariables
   >(SEND_MESSAGE, {
-    onCompleted: res => console.log(res),
+    onCompleted: (res) => console.log(res),
   })
 
   React.useEffect(() => {
@@ -82,6 +89,7 @@ const Room: React.FC = () => {
 
       <Formik
         initialValues={{ message: "" }}
+        validationSchema={RoomSchema}
         onSubmit={({ message }, form) => {
           sendMessage({
             variables: {

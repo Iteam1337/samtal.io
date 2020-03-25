@@ -42,7 +42,7 @@ const CreateRoom = () => {
     <Formik
       initialValues={{ name: "" }}
       validationSchema={CreateRoomSchema}
-      onSubmit={input => {
+      onSubmit={(input) => {
         createRoom({
           variables: {
             input,
