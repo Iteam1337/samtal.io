@@ -1,6 +1,17 @@
 import React from "react"
 import styled from "styled-components"
 import { useField } from "formik"
+import { gql, useMutation } from "@apollo/client"
+import {
+  TypingMessageMutationVariables,
+  TypingMessageMutation,
+} from "../__generated__/types"
+
+const TYPING_MESSAGE = gql`
+  mutation TypingMessage($input: TypingMessageInput!) {
+    typingMessage(input: $input)
+  }
+`
 
 const Input = styled.input`
   border: 1px solid #c8cdd6;
@@ -30,15 +41,39 @@ const Wrapper = styled.div`
 `
 
 interface CreateMessageProps {
+  from: string
   name: string
+  roomId: string
 }
 
 const CreateMessage: React.FC<CreateMessageProps> = props => {
+  const [typingMessage] = useMutation<
+    TypingMessageMutation,
+    TypingMessageMutationVariables
+  >(TYPING_MESSAGE)
   const [field] = useField(props)
 
   return (
     <Wrapper>
-      <Input type="text" placeholder="Skriv ditt inlägg..." {...field} />
+      <Input
+        {...field}
+        placeholder="Skriv ditt inlägg..."
+        onChange={event => {
+          const message = event.target.value
+
+          typingMessage({
+            variables: {
+              input: {
+                roomId: props.roomId,
+                from: props.from,
+                message,
+              },
+            },
+          })
+
+          field.onChange(event)
+        }}
+      />
     </Wrapper>
   )
 }

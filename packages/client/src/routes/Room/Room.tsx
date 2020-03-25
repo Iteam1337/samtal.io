@@ -10,6 +10,7 @@ import {
   SendMessageMutationVariables,
 } from "../../__generated__/types"
 import { Formik, Form } from "formik"
+import { useIsTyping } from "../../hooks/useIsTyping"
 
 const SEND_MESSAGE = gql`
   mutation SendMessage($input: SendMessageInput!) {
@@ -38,6 +39,7 @@ interface ChatMember {
 const Room: React.FC = () => {
   const { roomId } = useParams()
   const navigate = useNavigate()
+  const [userTyping, resetUserIsTyping] = useIsTyping(roomId)
   const [storageChatMember] = useLocalStorage("chatMember")
   const [chatMember, setChatMember] = React.useState<ChatMember>({
     name: "",
@@ -46,9 +48,7 @@ const Room: React.FC = () => {
   const [sendMessage] = useMutation<
     SendMessageMutation,
     SendMessageMutationVariables
-  >(SEND_MESSAGE, {
-    onCompleted: res => console.log(res),
-  })
+  >(SEND_MESSAGE)
 
   React.useEffect(() => {
     if (!storageChatMember) {
@@ -92,12 +92,18 @@ const Room: React.FC = () => {
               },
             },
           })
+
+          resetUserIsTyping()
           form.resetForm()
         }}
       >
         <Form>
-          <ChatLog roomId={roomId} />
-          <CreateMessage name="message" />
+          <ChatLog roomId={roomId} userTyping={userTyping} />
+          <CreateMessage
+            name="message"
+            roomId={roomId}
+            from={chatMember.name}
+          />
         </Form>
       </Formik>
     </Wrapper>
