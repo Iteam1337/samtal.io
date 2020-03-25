@@ -1,15 +1,15 @@
-import React from "react"
-import { gql, useMutation } from "@apollo/client"
-import { useNavigate, useParams } from "react-router-dom"
-import styled from "styled-components"
-import ChatLog from "../../components/ChatLog"
-import CreateMessage from "../../components/CreateMessage"
-import { useLocalStorage } from "@iteam/hooks"
+import React from 'react'
+import { gql, useMutation } from '@apollo/client'
+import { useNavigate, useParams } from 'react-router-dom'
+import styled from 'styled-components'
+import ChatLog from '../../components/ChatLog'
+import CreateMessage from '../../components/CreateMessage'
+import { useLocalStorage } from '@iteam/hooks'
 import {
   SendMessageMutation,
   SendMessageMutationVariables,
-} from "../../__generated__/types"
-import { Formik, Form } from "formik"
+} from '../../__generated__/types'
+import { Formik, Form } from 'formik'
 
 const SEND_MESSAGE = gql`
   mutation SendMessage($input: SendMessageInput!) {
@@ -38,16 +38,16 @@ interface ChatMember {
 const Room: React.FC = () => {
   const { roomId } = useParams()
   const navigate = useNavigate()
-  const [storageChatMember] = useLocalStorage("chatMember")
+  const [storageChatMember] = useLocalStorage('chatMember')
   const [chatMember, setChatMember] = React.useState<ChatMember>({
-    name: "",
-    id: "",
+    name: '',
+    id: '',
   })
   const [sendMessage] = useMutation<
     SendMessageMutation,
     SendMessageMutationVariables
   >(SEND_MESSAGE, {
-    onCompleted: res => console.log(res),
+    onCompleted: (res) => console.log(res),
   })
 
   React.useEffect(() => {
@@ -81,7 +81,7 @@ const Room: React.FC = () => {
       </Header>
 
       <Formik
-        initialValues={{ message: "" }}
+        initialValues={{ message: '' }}
         onSubmit={({ message }, form) => {
           sendMessage({
             variables: {

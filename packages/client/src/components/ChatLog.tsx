@@ -1,13 +1,13 @@
-import React from "react"
-import { gql, useSubscription } from "@apollo/client"
-import { motion, AnimatePresence } from "framer-motion"
-import styled from "styled-components"
+import React from 'react'
+import { gql, useSubscription } from '@apollo/client'
+import { motion, AnimatePresence } from 'framer-motion'
+import styled from 'styled-components'
 import {
   ChatMessage,
   MessageSentSubscription,
   MessageSentSubscriptionVariables,
-} from "../__generated__/types"
-import { useField } from "formik"
+} from '../__generated__/types'
+import { useField } from 'formik'
 
 const MESSAGES_SUBSCRIPTION = gql`
   subscription MessageSent($roomId: String!) {
@@ -78,7 +78,7 @@ interface ChatLogProps {
 }
 
 const ChatLog: React.FC<ChatLogProps> = ({ roomId }) => {
-  const [message] = useField("message")
+  const [message] = useField('message')
   const [chatLog, updateChatLog] = React.useState<ChatMessage[]>([])
   const { error } = useSubscription<
     MessageSentSubscription,
@@ -117,7 +117,7 @@ const ChatLog: React.FC<ChatLogProps> = ({ roomId }) => {
             </MessageBox>
           ))}
         </AnimatePresence>
-        {message.value !== "" && (
+        {message.value !== '' && (
           <MessageBlur>
             <p>{message.value}</p>
           </MessageBlur>

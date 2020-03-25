@@ -1,7 +1,7 @@
 export enum StorageKeys {
-  ChatMember = "chatMember",
-  Login = "login",
-  Token = "token",
+  ChatMember = 'chatMember',
+  Login = 'login',
+  Token = 'token',
 }
 
 interface ChatMember {

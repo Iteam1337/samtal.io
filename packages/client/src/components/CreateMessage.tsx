@@ -1,6 +1,6 @@
-import React from "react"
-import styled from "styled-components"
-import { useField } from "formik"
+import React from 'react'
+import styled from 'styled-components'
+import { useField } from 'formik'
 
 const Input = styled.input`
   border: 1px solid #c8cdd6;
@@ -33,7 +33,7 @@ interface CreateMessageProps {
   name: string
 }
 
-const CreateMessage: React.FC<CreateMessageProps> = props => {
+const CreateMessage: React.FC<CreateMessageProps> = (props) => {
   const [field] = useField(props)
 
   return (
