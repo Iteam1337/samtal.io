@@ -2,8 +2,11 @@ import { pubsub } from '../server'
 import { Resolvers } from '../__generated__/graphql'
 import { withFilter } from 'apollo-server-express'
 import { v4 as uuidv4 } from 'uuid'
+import NodeCache from 'node-cache'
 
 const CHATMESSAGE_ADDED = 'CHATMESSAGE_ADDED'
+
+const cache = new NodeCache()
 
 export const resolvers: Resolvers = {
   Mutation: {
@@ -55,8 +58,19 @@ export const resolvers: Resolvers = {
 
       return newMessage
     },
+    permissionToSpeak: (_, { roomId, chatMemberId }) => {
+      console.log(roomId, chatMemberId)
+      const user = cache.get(chatMemberId)
+      console.log(user)
+      return true
+    },
     createChatMember: (_, { name, roomId }) => {
       const id = uuidv4()
+      cache.set(id, {
+        name,
+        roomId,
+      })
+
       return { name, id, roomId }
     },
   },

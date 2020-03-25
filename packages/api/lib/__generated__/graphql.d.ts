@@ -61,11 +61,12 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  createRoom?: Maybe<Room>
+  createRoom: Room
   createChatMember: ChatMember
-  sendMessage?: Maybe<ChatMessage>
-  register?: Maybe<Token>
-  login?: Maybe<Token>
+  permissionToSpeak: Scalars['Boolean']
+  sendMessage: ChatMessage
+  register: Token
+  login: Token
 }
 
 export type MutationCreateRoomArgs = {
@@ -75,6 +76,11 @@ export type MutationCreateRoomArgs = {
 export type MutationCreateChatMemberArgs = {
   roomId: Scalars['String']
   name: Scalars['String']
+}
+
+export type MutationPermissionToSpeakArgs = {
+  roomId: Scalars['String']
+  chatMemberId: Scalars['String']
 }
 
 export type MutationSendMessageArgs = {
@@ -248,13 +254,13 @@ export type ResolversTypes = {
   CreateRoomInput: CreateRoomInput
   AgendaInput: AgendaInput
   ChatMember: ResolverTypeWrapper<ChatMember>
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   SendMessageInput: SendMessageInput
   ChatMessage: ResolverTypeWrapper<ChatMessage>
   RegisterInput: RegisterInput
   Token: ResolverTypeWrapper<Token>
   LoginInput: LoginInput
   Subscription: ResolverTypeWrapper<{}>
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   CacheControlScope: CacheControlScope
   Upload: ResolverTypeWrapper<Scalars['Upload']>
   Int: ResolverTypeWrapper<Scalars['Int']>
@@ -272,13 +278,13 @@ export type ResolversParentTypes = {
   CreateRoomInput: CreateRoomInput
   AgendaInput: AgendaInput
   ChatMember: ChatMember
+  Boolean: Scalars['Boolean']
   SendMessageInput: SendMessageInput
   ChatMessage: ChatMessage
   RegisterInput: RegisterInput
   Token: Token
   LoginInput: LoginInput
   Subscription: {}
-  Boolean: Scalars['Boolean']
   CacheControlScope: CacheControlScope
   Upload: Scalars['Upload']
   Int: Scalars['Int']
@@ -335,7 +341,7 @@ export type MutationResolvers<
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
   createRoom?: Resolver<
-    Maybe<ResolversTypes['Room']>,
+    ResolversTypes['Room'],
     ParentType,
     ContextType,
     RequireFields<MutationCreateRoomArgs, 'input'>
@@ -346,20 +352,26 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateChatMemberArgs, 'roomId' | 'name'>
   >
+  permissionToSpeak?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationPermissionToSpeakArgs, 'roomId' | 'chatMemberId'>
+  >
   sendMessage?: Resolver<
-    Maybe<ResolversTypes['ChatMessage']>,
+    ResolversTypes['ChatMessage'],
     ParentType,
     ContextType,
     RequireFields<MutationSendMessageArgs, 'input'>
   >
   register?: Resolver<
-    Maybe<ResolversTypes['Token']>,
+    ResolversTypes['Token'],
     ParentType,
     ContextType,
     RequireFields<MutationRegisterArgs, 'input'>
   >
   login?: Resolver<
-    Maybe<ResolversTypes['Token']>,
+    ResolversTypes['Token'],
     ParentType,
     ContextType,
     RequireFields<MutationLoginArgs, 'input'>
