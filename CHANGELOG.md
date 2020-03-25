@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/Iteam1337/samtal.io/compare/v1.1.0...v1.2.0) (2020-03-25)
+
+
+### Features
+
+* message max length ([#9](https://github.com/Iteam1337/samtal.io/issues/9)) ([3dd344c](https://github.com/Iteam1337/samtal.io/commit/3dd344cd6422d4599088dac0849e1947da4dffc0))
+
 # [1.1.0](https://github.com/Iteam1337/samtal.io/compare/v1.0.1...v1.1.0) (2020-03-25)
 
 
