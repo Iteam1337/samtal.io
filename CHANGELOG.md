@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/Iteam1337/samtal.io/compare/v1.0.0...v1.0.1) (2020-03-25)
+
+
+### Bug Fixes
+
+* scale room header svg ([#8](https://github.com/Iteam1337/samtal.io/issues/8)) ([daf203b](https://github.com/Iteam1337/samtal.io/commit/daf203b236b9886d6e704bc63bcde81127fd9646))
+
 # 1.0.0 (2020-03-25)
 
 
