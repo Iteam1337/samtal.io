@@ -7,7 +7,6 @@ import {
   MessageSentSubscription,
   MessageSentSubscriptionVariables,
 } from '../__generated__/types'
-import { useField } from 'formik'
 
 const MESSAGES_SUBSCRIPTION = gql`
   subscription MessageSent($roomId: String!) {
@@ -75,10 +74,10 @@ const MessageBlur = styled.div`
 
 interface ChatLogProps {
   roomId: string
+  userTyping?: string
 }
 
-const ChatLog: React.FC<ChatLogProps> = ({ roomId }) => {
-  const [message] = useField('message')
+const ChatLog: React.FC<ChatLogProps> = ({ roomId, userTyping }) => {
   const [chatLog, updateChatLog] = React.useState<ChatMessage[]>([])
   const { error } = useSubscription<
     MessageSentSubscription,
@@ -117,9 +116,9 @@ const ChatLog: React.FC<ChatLogProps> = ({ roomId }) => {
             </MessageBox>
           ))}
         </AnimatePresence>
-        {message.value !== '' && (
+        {!!userTyping && (
           <MessageBlur>
-            <p>{message.value}</p>
+            <p>{userTyping}</p>
           </MessageBlur>
         )}
       </ul>

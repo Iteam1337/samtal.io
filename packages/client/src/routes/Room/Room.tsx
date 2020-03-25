@@ -1,15 +1,17 @@
-import React from 'react'
 import { gql, useMutation } from '@apollo/client'
+import { useLocalStorage } from '@iteam/hooks'
+import { Form, Formik } from 'formik'
+import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 import ChatLog from '../../components/ChatLog'
 import CreateMessage from '../../components/CreateMessage'
-import { useLocalStorage } from '@iteam/hooks'
+import { useIsTyping } from '../../hooks/useIsTyping'
 import {
   SendMessageMutation,
   SendMessageMutationVariables,
 } from '../../__generated__/types'
-import { Formik, Form } from 'formik'
 
 const SEND_MESSAGE = gql`
   mutation SendMessage($input: SendMessageInput!) {
@@ -19,6 +21,12 @@ const SEND_MESSAGE = gql`
     }
   }
 `
+
+const RoomSchema = Yup.object().shape({
+  message: Yup.string()
+    .required('Required')
+    .max(280),
+})
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -38,6 +46,7 @@ interface ChatMember {
 const Room: React.FC = () => {
   const { roomId } = useParams()
   const navigate = useNavigate()
+  const [userTyping, resetUserIsTyping] = useIsTyping(roomId)
   const [storageChatMember] = useLocalStorage('chatMember')
   const [chatMember, setChatMember] = React.useState<ChatMember>({
     name: '',
@@ -82,6 +91,7 @@ const Room: React.FC = () => {
 
       <Formik
         initialValues={{ message: '' }}
+        validationSchema={RoomSchema}
         onSubmit={({ message }, form) => {
           sendMessage({
             variables: {
@@ -92,12 +102,18 @@ const Room: React.FC = () => {
               },
             },
           })
+
+          resetUserIsTyping()
           form.resetForm()
         }}
       >
         <Form>
-          <ChatLog roomId={roomId} />
-          <CreateMessage name="message" />
+          <ChatLog roomId={roomId} userTyping={userTyping} />
+          <CreateMessage
+            name="message"
+            roomId={roomId}
+            from={chatMember.name}
+          />
         </Form>
       </Formik>
     </Wrapper>
