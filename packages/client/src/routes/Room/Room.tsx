@@ -10,6 +10,7 @@ import {
   SendMessageMutationVariables,
 } from "../../__generated__/types"
 import { Formik, Form } from "formik"
+import * as Yup from "yup"
 import { useIsTyping } from "../../hooks/useIsTyping"
 
 const SEND_MESSAGE = gql`
@@ -20,6 +21,12 @@ const SEND_MESSAGE = gql`
     }
   }
 `
+
+const RoomSchema = Yup.object().shape({
+  message: Yup.string()
+    .required("Required")
+    .max(280),
+})
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -48,7 +55,9 @@ const Room: React.FC = () => {
   const [sendMessage] = useMutation<
     SendMessageMutation,
     SendMessageMutationVariables
-  >(SEND_MESSAGE)
+  >(SEND_MESSAGE, {
+    onCompleted: res => console.log(res),
+  })
 
   React.useEffect(() => {
     if (!storageChatMember) {
@@ -82,6 +91,7 @@ const Room: React.FC = () => {
 
       <Formik
         initialValues={{ message: "" }}
+        validationSchema={RoomSchema}
         onSubmit={({ message }, form) => {
           sendMessage({
             variables: {
