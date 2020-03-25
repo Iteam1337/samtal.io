@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/Iteam1337/samtal.io/compare/v1.0.1...v1.1.0) (2020-03-25)
+
+
+### Features
+
+* add message blur across chats ([#11](https://github.com/Iteam1337/samtal.io/issues/11)) ([04fe1e2](https://github.com/Iteam1337/samtal.io/commit/04fe1e22c246e297877ac9b3b57ba04f3380efd0))
+
 ## [1.0.1](https://github.com/Iteam1337/samtal.io/compare/v1.0.0...v1.0.1) (2020-03-25)
 
 
