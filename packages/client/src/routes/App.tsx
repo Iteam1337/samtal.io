@@ -1,9 +1,9 @@
-import React from "react"
-import CreateRoom from "./Room/CreateRoom"
-import Lobby from "./Room/Lobby"
-import Room from "./Room/Room"
-import Login from "./Login/Login"
-import { Routes, Route } from "react-router-dom"
+import React from 'react'
+import CreateRoom from './Room/CreateRoom'
+import Lobby from './Room/Lobby'
+import Room from './Room/Room'
+import Login from './Login/Login'
+import { Routes, Route } from 'react-router-dom'
 
 function App() {
   return (

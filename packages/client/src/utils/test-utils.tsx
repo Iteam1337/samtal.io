@@ -1,13 +1,13 @@
-import React from "react"
-import { MockedProvider, MockedResponse } from "@apollo/client/testing"
-import { render as rtlRender } from "@testing-library/react"
-import { Router } from "react-router"
-import { createMemoryHistory, MemoryHistory } from "history"
+import React from 'react'
+import { MockedProvider, MockedResponse } from '@apollo/client/testing'
+import { render as rtlRender } from '@testing-library/react'
+import { Router } from 'react-router'
+import { createMemoryHistory, MemoryHistory } from 'history'
 
 export const render = (
   ui: JSX.Element,
   {
-    route = "/",
+    route = '/',
     mocks = [],
     history = createMemoryHistory({ initialEntries: [route] }),
   }: { route?: string; mocks?: MockedResponse[]; history?: MemoryHistory } = {}

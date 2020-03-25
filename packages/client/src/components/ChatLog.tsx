@@ -1,12 +1,12 @@
-import React from "react"
-import { gql, useSubscription } from "@apollo/client"
-import { motion, AnimatePresence } from "framer-motion"
-import styled from "styled-components"
+import React from 'react'
+import { gql, useSubscription } from '@apollo/client'
+import { motion, AnimatePresence } from 'framer-motion'
+import styled from 'styled-components'
 import {
   ChatMessage,
   MessageSentSubscription,
   MessageSentSubscriptionVariables,
-} from "../__generated__/types"
+} from '../__generated__/types'
 
 const MESSAGES_SUBSCRIPTION = gql`
   subscription MessageSent($roomId: String!) {

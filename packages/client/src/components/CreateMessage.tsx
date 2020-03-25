@@ -1,11 +1,11 @@
-import React from "react"
-import styled from "styled-components"
-import { useField } from "formik"
-import { gql, useMutation } from "@apollo/client"
+import { gql, useMutation } from '@apollo/client'
+import { useField } from 'formik'
+import React from 'react'
+import styled from 'styled-components'
 import {
-  TypingMessageMutationVariables,
   TypingMessageMutation,
-} from "../__generated__/types"
+  TypingMessageMutationVariables,
+} from '../__generated__/types'
 
 const TYPING_MESSAGE = gql`
   mutation TypingMessage($input: TypingMessageInput!) {
@@ -47,7 +47,7 @@ interface MessageLengthProps {
 
 const MessageLength = styled.div<MessageLengthProps>`
   align-self: flex-end;
-  color: ${({ isInvalid }) => (isInvalid ? "red" : "#333")};
+  color: ${({ isInvalid }) => (isInvalid ? 'red' : '#333')};
   font-size: 12px;
   margin-top: 0.25rem;
 `
@@ -58,7 +58,7 @@ interface CreateMessageProps {
   roomId: string
 }
 
-const CreateMessage: React.FC<CreateMessageProps> = props => {
+const CreateMessage: React.FC<CreateMessageProps> = (props) => {
   const [typingMessage] = useMutation<
     TypingMessageMutation,
     TypingMessageMutationVariables
@@ -71,7 +71,7 @@ const CreateMessage: React.FC<CreateMessageProps> = props => {
       <Input
         {...field}
         placeholder="Skriv ditt inlägg..."
-        onChange={event => {
+        onChange={(event) => {
           const message = event.target.value
 
           typingMessage({

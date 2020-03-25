@@ -1,6 +1,6 @@
 /// <reference types="faker" />
 
-declare module "test-data-bot" {
+declare module 'test-data-bot' {
   export type BuilderFunction<T> = (overrideFields?: Partial<T>) => T
   export type BuilderValue<T> = ((...args: any[]) => T) | T
 

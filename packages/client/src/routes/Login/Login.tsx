@@ -1,13 +1,13 @@
-import { gql, useMutation } from "@apollo/client"
-import React from "react"
-import { useNavigate } from "react-router-dom"
-import { Formik, Form, Field, ErrorMessage } from "formik"
-import * as Yup from "yup"
-import { useLocalStorage } from "@iteam/hooks"
+import { gql, useMutation } from '@apollo/client'
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
+import { useLocalStorage } from '@iteam/hooks'
 import {
   LoginMutation,
   LoginMutationVariables,
-} from "../../__generated__/types"
+} from '../../__generated__/types'
 
 export const LOGIN = gql`
   mutation Login($input: LoginInput!) {
@@ -19,27 +19,27 @@ export const LOGIN = gql`
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
-    .email("Invalid email")
-    .required("Required"),
-  password: Yup.string().required("Required"),
+    .email('Invalid email')
+    .required('Required'),
+  password: Yup.string().required('Required'),
 })
 
 const Login: React.FC = () => {
   const navigate = useNavigate()
-  const [, setToken] = useLocalStorage("token")
+  const [, setToken] = useLocalStorage('token')
 
   const [login] = useMutation<LoginMutation, LoginMutationVariables>(LOGIN, {
     onCompleted: ({ login }) => {
       setToken(login.token)
-      navigate("/")
+      navigate('/')
     },
   })
 
   return (
     <Formik
-      initialValues={{ email: "", password: "" }}
+      initialValues={{ email: '', password: '' }}
       validationSchema={LoginSchema}
-      onSubmit={input => {
+      onSubmit={(input) => {
         login({
           variables: {
             input,

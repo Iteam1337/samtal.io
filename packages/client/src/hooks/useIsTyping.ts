@@ -1,9 +1,9 @@
-import React from "react"
-import { gql, useSubscription } from "@apollo/client"
+import React from 'react'
+import { gql, useSubscription } from '@apollo/client'
 import {
   MessageTypingSubscription,
   MessageTypingSubscriptionVariables,
-} from "../__generated__/types"
+} from '../__generated__/types'
 
 const MESSAGE_TYPING_SUBSCRIPTION = gql`
   subscription MessageTyping($roomId: String!) {

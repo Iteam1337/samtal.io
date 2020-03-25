@@ -1,13 +1,13 @@
-import React from "react"
-import { gql, useMutation } from "@apollo/client"
-import { useParams, useNavigate } from "react-router-dom"
-import styled from "styled-components"
-import { setStorage, StorageKeys } from "../../utils/localStorage"
-import { Formik, Form, Field } from "formik"
+import React from 'react'
+import { gql, useMutation } from '@apollo/client'
+import { useParams, useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
+import { setStorage, StorageKeys } from '../../utils/localStorage'
+import { Formik, Form, Field } from 'formik'
 import {
   CreateChatMemberMutation,
   CreateChatMemberMutationVariables,
-} from "../../__generated__/types"
+} from '../../__generated__/types'
 
 const CREATE_CHAT_MEMBER = gql`
   mutation CreateChatMember($roomId: String!, $name: String!) {
@@ -34,7 +34,7 @@ const Lobby: React.FC = () => {
     CreateChatMemberMutation,
     CreateChatMemberMutationVariables
   >(CREATE_CHAT_MEMBER, {
-    onCompleted: res => {
+    onCompleted: (res) => {
       setStorage(StorageKeys.ChatMember, {
         name: res.createChatMember.name,
         id: res.createChatMember.id,
@@ -46,7 +46,7 @@ const Lobby: React.FC = () => {
   return (
     <Wrapper>
       <Formik
-        initialValues={{ chatMemberName: "" }}
+        initialValues={{ chatMemberName: '' }}
         onSubmit={({ chatMemberName }) =>
           createChatMember({ variables: { name: chatMemberName, roomId } })
         }
