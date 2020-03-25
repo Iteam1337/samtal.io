@@ -61,11 +61,12 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  createRoom?: Maybe<Room>
+  createRoom: Room
   createChatMember: ChatMember
-  sendMessage?: Maybe<ChatMessage>
-  register?: Maybe<Token>
-  login?: Maybe<Token>
+  sendMessage: ChatMessage
+  register: Token
+  login: Token
+  typingMessage: Scalars['String']
 }
 
 export type MutationCreateRoomArgs = {
@@ -87,6 +88,10 @@ export type MutationRegisterArgs = {
 
 export type MutationLoginArgs = {
   input: LoginInput
+}
+
+export type MutationTypingMessageArgs = {
+  input: TypingMessageInput
 }
 
 export type Query = {
@@ -117,15 +122,26 @@ export type SendMessageInput = {
 export type Subscription = {
   __typename?: 'Subscription'
   messageSent?: Maybe<ChatMessage>
+  messageTyping: ChatMessage
 }
 
 export type SubscriptionMessageSentArgs = {
   roomId: Scalars['String']
 }
 
+export type SubscriptionMessageTypingArgs = {
+  roomId: Scalars['String']
+}
+
 export type Token = {
   __typename?: 'Token'
   token: Scalars['String']
+}
+
+export type TypingMessageInput = {
+  from: Scalars['String']
+  message: Scalars['String']
+  roomId: Scalars['ID']
 }
 
 export type User = {
@@ -253,6 +269,8 @@ export type ResolversTypes = {
   RegisterInput: RegisterInput
   Token: ResolverTypeWrapper<Token>
   LoginInput: LoginInput
+  TypingMessageInput: TypingMessageInput
+  ID: ResolverTypeWrapper<Scalars['ID']>
   Subscription: ResolverTypeWrapper<{}>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   CacheControlScope: CacheControlScope
@@ -277,6 +295,8 @@ export type ResolversParentTypes = {
   RegisterInput: RegisterInput
   Token: Token
   LoginInput: LoginInput
+  TypingMessageInput: TypingMessageInput
+  ID: Scalars['ID']
   Subscription: {}
   Boolean: Scalars['Boolean']
   CacheControlScope: CacheControlScope
@@ -335,7 +355,7 @@ export type MutationResolvers<
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
   createRoom?: Resolver<
-    Maybe<ResolversTypes['Room']>,
+    ResolversTypes['Room'],
     ParentType,
     ContextType,
     RequireFields<MutationCreateRoomArgs, 'input'>
@@ -347,22 +367,28 @@ export type MutationResolvers<
     RequireFields<MutationCreateChatMemberArgs, 'roomId' | 'name'>
   >
   sendMessage?: Resolver<
-    Maybe<ResolversTypes['ChatMessage']>,
+    ResolversTypes['ChatMessage'],
     ParentType,
     ContextType,
     RequireFields<MutationSendMessageArgs, 'input'>
   >
   register?: Resolver<
-    Maybe<ResolversTypes['Token']>,
+    ResolversTypes['Token'],
     ParentType,
     ContextType,
     RequireFields<MutationRegisterArgs, 'input'>
   >
   login?: Resolver<
-    Maybe<ResolversTypes['Token']>,
+    ResolversTypes['Token'],
     ParentType,
     ContextType,
     RequireFields<MutationLoginArgs, 'input'>
+  >
+  typingMessage?: Resolver<
+    ResolversTypes['String'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationTypingMessageArgs, 'input'>
   >
 }
 
@@ -397,6 +423,13 @@ export type SubscriptionResolvers<
     ParentType,
     ContextType,
     RequireFields<SubscriptionMessageSentArgs, 'roomId'>
+  >
+  messageTyping?: SubscriptionResolver<
+    ResolversTypes['ChatMessage'],
+    'messageTyping',
+    ParentType,
+    ContextType,
+    RequireFields<SubscriptionMessageTypingArgs, 'roomId'>
   >
 }
 

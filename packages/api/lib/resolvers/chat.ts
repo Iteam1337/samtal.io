@@ -4,6 +4,7 @@ import { withFilter } from 'apollo-server-express'
 import { v4 as uuidv4 } from 'uuid'
 
 const CHATMESSAGE_ADDED = 'CHATMESSAGE_ADDED'
+const CHATMESSAGE_TYPING = 'CHATMESSAGE_TYPING'
 
 export const resolvers: Resolvers = {
   Mutation: {
@@ -53,11 +54,28 @@ export const resolvers: Resolvers = {
         roomId: input.roomId,
       })
 
+      pubsub.publish(CHATMESSAGE_TYPING, {
+        messageTyping: null,
+        roomId: input.roomId,
+      })
+
       return newMessage
     },
     createChatMember: (_, { name, roomId }) => {
       const id = uuidv4()
       return { name, id, roomId }
+    },
+
+    typingMessage: (_, { input }) => {
+      pubsub.publish(CHATMESSAGE_TYPING, {
+        messageTyping: {
+          message: input.message,
+          from: input.from,
+        },
+        roomId: input.roomId,
+      })
+
+      return input.message
     },
   },
 
@@ -65,9 +83,14 @@ export const resolvers: Resolvers = {
     messageSent: {
       subscribe: withFilter(
         () => pubsub.asyncIterator([CHATMESSAGE_ADDED]),
-        (payload, variables) => {
-          return payload.roomId === variables.roomId
-        }
+        (payload, variables) => payload.roomId === variables.roomId
+      ),
+    },
+
+    messageTyping: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator([CHATMESSAGE_TYPING]),
+        (payload, variables) => payload.roomId === variables.roomId
       ),
     },
   },

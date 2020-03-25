@@ -70,6 +70,12 @@ export const typeDefs = gql`
     password: String!
   }
 
+  input TypingMessageInput {
+    from: String!
+    message: String!
+    roomId: ID!
+  }
+
   type Query {
     user: User @isAuthenticated
   }
@@ -80,9 +86,11 @@ export const typeDefs = gql`
     sendMessage(input: SendMessageInput!): ChatMessage!
     register(input: RegisterInput!): Token!
     login(input: LoginInput!): Token!
+    typingMessage(input: TypingMessageInput!): String!
   }
 
   type Subscription {
     messageSent(roomId: String!): ChatMessage
+    messageTyping(roomId: String!): ChatMessage
   }
 `

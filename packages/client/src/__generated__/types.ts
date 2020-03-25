@@ -57,6 +57,7 @@ export type Mutation = {
   sendMessage: ChatMessage
   register: Token
   login: Token
+  typingMessage: Scalars["String"]
 }
 
 export type MutationCreateRoomArgs = {
@@ -78,6 +79,10 @@ export type MutationRegisterArgs = {
 
 export type MutationLoginArgs = {
   input: LoginInput
+}
+
+export type MutationTypingMessageArgs = {
+  input: TypingMessageInput
 }
 
 export type Query = {
@@ -108,15 +113,26 @@ export type SendMessageInput = {
 export type Subscription = {
   __typename?: "Subscription"
   messageSent?: Maybe<ChatMessage>
+  messageTyping?: Maybe<ChatMessage>
 }
 
 export type SubscriptionMessageSentArgs = {
   roomId: Scalars["String"]
 }
 
+export type SubscriptionMessageTypingArgs = {
+  roomId: Scalars["String"]
+}
+
 export type Token = {
   __typename?: "Token"
   token: Scalars["String"]
+}
+
+export type TypingMessageInput = {
+  from: Scalars["String"]
+  message: Scalars["String"]
+  roomId: Scalars["ID"]
 }
 
 export type User = {
@@ -136,16 +152,14 @@ export type MessageSentSubscription = { __typename?: "Subscription" } & {
   >
 }
 
-export type SendMessageMutationVariables = {
-  input: SendMessageInput
+export type TypingMessageMutationVariables = {
+  input: TypingMessageInput
 }
 
-export type SendMessageMutation = { __typename?: "Mutation" } & {
-  sendMessage: { __typename?: "ChatMessage" } & Pick<
-    ChatMessage,
-    "from" | "message"
-  >
-}
+export type TypingMessageMutation = { __typename?: "Mutation" } & Pick<
+  Mutation,
+  "typingMessage"
+>
 
 export type LoginMutationVariables = {
   input: LoginInput
@@ -172,5 +186,26 @@ export type CreateChatMemberMutation = { __typename?: "Mutation" } & {
   createChatMember: { __typename?: "ChatMember" } & Pick<
     ChatMember,
     "name" | "id"
+  >
+}
+
+export type MessageTypingSubscriptionVariables = {
+  roomId: Scalars["String"]
+}
+
+export type MessageTypingSubscription = { __typename?: "Subscription" } & {
+  messageTyping?: Maybe<
+    { __typename?: "ChatMessage" } & Pick<ChatMessage, "message" | "from">
+  >
+}
+
+export type SendMessageMutationVariables = {
+  input: SendMessageInput
+}
+
+export type SendMessageMutation = { __typename?: "Mutation" } & {
+  sendMessage: { __typename?: "ChatMessage" } & Pick<
+    ChatMessage,
+    "from" | "message"
   >
 }
