@@ -58,7 +58,7 @@
     "@graphql-codegen/cli": "1.13.1",
     "@graphql-codegen/typescript": "1.13.1",
     "@graphql-codegen/typescript-operations": "1.13.1",
-    "@types/faker": "4.1.10",
+    "@types/faker": "4.1.11",
     "@types/yup": "0.26.33",
     "mutationobserver-shim": "0.3.3",
     "test-data-bot": "0.8.0"
